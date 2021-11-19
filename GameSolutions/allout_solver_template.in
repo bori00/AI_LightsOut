@@ -1,0 +1,31 @@
+%set(binary_resolution).
+%set(print_gen).
+
+set(prolog_style_variables).
+
+set(arithmetic).
+assign(domain_size, 7).
+
+formulas(usable).      
+
+all X all Y (Switch(X, Y)=0 | Switch(X, Y)=1).	                         
+
+all X (Switch(X, 0)=0 & Switch(X, 6)=0).
+all Y (Switch(0, Y)=0 & Switch(6, Y)=0).
+
+Xor(X, Y)=1 <-> (X=1 & Y=0) | (X=0 & Y=1).
+Xor(X, Y)!=1 <-> Xor(X, Y)=0.
+               
+((X >= 1 & X <= 5 & Y >= 1 & Y <= 5 & Z=X+1 & X=U+1 & V=Y+1 & Y=W+1) -> (OddToggles(X, Y) <-> Xor(Xor(Xor(Switch(X, V), Switch(X, W)), Xor(Switch(U, Y), Switch(Z, Y))), Switch(X, Y))=1)).
+
+On(X, Y)=1 <-> OddToggles(X, Y).
+On(X, Y)=0 <-> -OddToggles(X, Y).
+
+end_of_list.
+
+formulas(assumptions).
+{On}
+end_of_list.
+
+formulas(goals).
+end_of_list.

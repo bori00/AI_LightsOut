@@ -1,0 +1,44 @@
+%set(binary_resolution).
+%set(print_gen).
+
+set(prolog_style_variables).
+set(arithmetic).
+assign(domain_size, 5).
+
+formulas(assumptions).
+
+Xor(X, Y)=1 <-> (X=0 & Y=1) | (X=1 & Y=0).
+Xor(X, Y)!=1 -> Xor(X, Y)=0.
+
+And(X, Y)=1 <-> (X=1 & Y=1).
+And(X, Y)!=1 -> And(X, Y)=0.
+
+On(X, Y)=1 | On(X, Y)=0.
+
+(Y>=1 & YN+1=Y & D=DotProduct1(X, YN) & O=On(X, Y) & N=N1(X, Y)) -> DotProduct1(X, Y) = Xor(D, And(O, N)).
+(X>=0 & XN+1=X & D=DotProduct1(XN, 4) & O=On(X, 0) & N=N1(X, 0)) -> DotProduct1(X, 0) = Xor(D, And(O, N)).
+O=On(0, 0) & N=N1(0, 0) -> DotProduct1(0, 0)=And(O, N).
+
+(Y>=1 & YN+1=Y & D=DotProduct2(X, YN) & O=On(X, Y) & N=N2(X, Y)) -> DotProduct2(X, Y) = Xor(D, And(O, N)).
+(X>=0 & XN+1=X & D=DotProduct2(XN, 4) & O=On(X, 0) & N=N2(X, 0)) -> DotProduct2(X, 0) = Xor(D, And(O, N)).
+O=On(0, 0) & N=N2(0, 0) -> DotProduct2(0, 0)=And(O, N).
+
+DotProduct1(4, 4)=0.
+DotProduct2(4, 4)=0.
+
+exists X exists Y On(X, Y)=1.
+
+N1(0, 0)=0. N1(0, 1)=1. N1(0, 2)=1. N1(0, 3)=1. N1(0, 4)=0. 
+N1(1, 0)=1. N1(1, 1)=0. N1(1, 2)=1. N1(1, 3)=0. N1(1, 4)=1.  
+N1(2, 0)=1. N1(2, 1)=1. N1(2, 2)=0. N1(2, 3)=1. N1(2, 4)=1.
+N1(3, 0)=1. N1(3, 1)=0. N1(3, 2)=1. N1(3, 3)=0. N1(3, 4)=1.  
+N1(4, 0)=0. N1(4, 1)=1. N1(4, 2)=1. N1(4, 3)=1. N1(4, 4)=0. 
+
+N2(0, 0)=1. N2(0, 1)=0. N2(0, 2)=1. N2(0, 3)=0. N2(0, 4)=1. 
+N2(1, 0)=1. N2(1, 1)=0. N2(1, 2)=1. N2(1, 3)=0. N2(1, 4)=1.  
+N2(2, 0)=0. N2(2, 1)=0. N2(2, 2)=0. N2(2, 3)=0. N2(2, 4)=0.
+N2(3, 0)=1. N2(3, 1)=0. N2(3, 2)=1. N2(3, 3)=0. N2(3, 4)=1.  
+N2(4, 0)=1. N2(4, 1)=0. N2(4, 2)=1. N2(4, 3)=0. N2(4, 4)=1. 
+
+end_of_list.
+

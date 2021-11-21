@@ -3,6 +3,8 @@ from Tkinter import *
 from PIL import Image, ImageTk
 from Tkinter import E, S, N, W
 from os import *
+import time
+
 from GameService import GameService
 
 WINDOW_HEIGHT = 450
@@ -16,6 +18,8 @@ WINDOW_MARGIN_Y = 10
 This class is responsible for displaying the interface of the game 
 and handle user actions.
 """
+
+
 class TileGame:
 
     def __init__(self, no_tiles):
@@ -32,7 +36,7 @@ class TileGame:
         self.window.geometry(
             WINDOW_WIDTH.__str__() + 'x' + WINDOW_HEIGHT.__str__())
         self.window.minsize(250, 350)
-        self.window.tk.call("source","ttk-theme/forest-dark.tcl")
+        self.window.tk.call("source", "ttk-theme/forest-dark.tcl")
         style = Style()
         style.theme_use("forest-dark")
 
@@ -107,19 +111,22 @@ class TileGame:
         self.button_panel.columnconfigure(0, weight=1)
         self.button_panel.columnconfigure(1, weight=1)
         self.button_panel.columnconfigure(2, weight=1)
-
         self.hint_button = Button(master=self.button_panel,
                                   text="Hint",
-                                  command=self.__on_hint).grid(row=0,
-                                                               column=0)
+                                  command=self.__on_hint) \
+            .grid(row=0, column=0)
         self.reset_button = Button(master=self.button_panel,
                                    text="Reset",
-                                   command=self.__on_reset).grid(
-            row=0, column=1)
+                                   command=self.__on_reset) \
+            .grid(row=0, column=1)
         self.solve_button = Button(master=self.button_panel,
                                    text="Solve",
-                                   command=self.__on_solve).grid(
-            row=0, column=2)
+                                   command=self.__on_solve) \
+            .grid(row=0, column=2)
+        self.solve_button = Button(master=self.button_panel,
+                                   text="New game",
+                                   command=self.__on_new_game) \
+            .grid(row=0, column=3)
 
     def __animate_hint(self, x, y, index):
         self.tiles[x][y].config(image=self.frames[index])
@@ -144,18 +151,25 @@ class TileGame:
         self.game_service.reset_game_session()
         self.__refresh_board()
 
+    def __next_hint(self, x, y):
+        self.__on_flip(x, y)
+        self.__animate_solution()
+
     def __animate_solution(self):
         if self.game_service.won_game_session():
             self.window.after_cancel(self.solution_animation_id)
             return
-        next_hint = self.game_service.get_hint()
-        self.__on_flip(next_hint[0], next_hint[1])
-        self.solution_animation_id = self.window.after(400,
-                                                       self.__animate_solution)
+        (x, y) = self.game_service.get_hint()
+        self.__animate_hint(x, y, 0)
+        self.solution_animation_id = self.window.after(1500,
+                                                       lambda: self.__next_hint(x,y))
 
     def __on_solve(self):
-        if not self.game_service.won_game_session():
-            self.__animate_solution()
+        self.__animate_solution()
+
+    def __on_new_game(self):
+        self.game_service.init_new_game_session()
+        self.__refresh_board()
 
     def run(self):
         self.window.mainloop()

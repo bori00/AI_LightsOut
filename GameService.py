@@ -42,6 +42,7 @@ class GameService:
             game_model_index = random.randint(0, GameService.NO_GAME_MODELS - 1)
         self.__played_games.append(game_model_index)
         self.__game_state = GameState(deepcopy(self.__game_models[game_model_index]))
+        self.__set_game_session_solutions()
 
     """
     Returns true if and only if the current game session was won.
@@ -56,6 +57,8 @@ class GameService:
 
     def switch_light(self, x, y):
         self.__game_state.switch_light(x, y)
+        if not self.__game_state.has_shortest_solution():
+            self.__set_game_session_solutions()
 
     """
     Returns the state of all light bulbs in the current game session, in the format of a list of lists of integers, 
@@ -74,8 +77,7 @@ class GameService:
         if self.__game_state.has_shortest_solution():
             return self.__game_state.get_hint_for_next_step()
         else:
-            game_solutions = map(self.__cut_first_last_row_col, self.__generate_game_solutions())
-            self.__game_state.set_solutions(game_solutions)
+            self.__set_game_session_solutions()
             return self.__game_state.get_hint_for_next_step()
 
     """
@@ -91,6 +93,16 @@ class GameService:
 
     def get_no_steps_in_game_session(self):
         return self.__game_state.get_total_no_steps()
+
+    """
+    Returns the number of steps in the shortest solution from the initial state to the winning state.
+    """
+    def length_of_shortest_solution_from_initial_state(self):
+        return self.__game_state.length_of_shortest_solution_from_initial_state()
+
+    def __set_game_session_solutions(self):
+        game_solutions = map(self.__cut_first_last_row_col, self.__generate_game_solutions())
+        self.__game_state.set_solutions(game_solutions)
 
     def __generate_game_solutions(self):
         try:
@@ -111,6 +123,7 @@ class GameService:
         except:  # handle other exceptions such as attribute errors
             print "Unexpected error:", sys.exc_info()[0]
         sys.exit(1)
+
 
     def __get_generated_game_models(self):
         f = open("GameModels/allout_math_efficient_generated.out")
@@ -156,11 +169,14 @@ class GameService:
         return extracted_solution
 
 
+#TODO: remove this code before submitting assignment
 # This code demonstrates the behavior of the service layer
 game_service = GameService()
 for i in range(3):
     print "----------------------------------------INIT STATE------------------------------------------------"
     print game_service._GameService__game_state._GameState__lights_on
+    print "Game shortest solution:"
+    print game_service._GameService__game_state._GameState__shortest_solution
     while not game_service.won_game_session():
         p = random.uniform(0, 1)
         # Take the correct step with a probability of 80%, and a random step with probability 20%
@@ -170,6 +186,8 @@ for i in range(3):
             print "----------------------------------------RESET GAME------------------------------------"
             print "Game state:"
             print game_service._GameService__game_state._GameState__lights_on
+            print "Game shortest solution:"
+            print game_service._GameService__game_state._GameState__shortest_solution
         elif p < 0.2:
             rand_step = (random.randint(0, 4), random.randint(0, 4))
             game_service.switch_light(rand_step[0], rand_step[1])
@@ -187,4 +205,5 @@ for i in range(3):
             print "Game shortest solution:"
             print game_service._GameService__game_state._GameState__shortest_solution
     print "No steps: " + str(game_service.get_no_steps_in_game_session())
+    print "Min no steps: " + str(game_service.length_of_shortest_solution_from_initial_state())
     game_service.init_new_game_session()

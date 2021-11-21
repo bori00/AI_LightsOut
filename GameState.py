@@ -23,7 +23,9 @@ class GameState:
         self.__initial_lights_on = deepcopy(lights_on)
         self.__lights_on = lights_on
         self.__shortest_solution = None
-        self.__no_steps = 0;
+        self.__no_taken_steps = 0
+        self.__initial_shortest_solution = None
+        self.__initial_shortest_solution_no_steps = None
 
     """
     Returns true if and only if the game is won.
@@ -47,7 +49,7 @@ class GameState:
 
     def switch_light(self, x, y):
         assert 0 <= x < GameState.no_rows and 0 <= y < GameState.no_cols
-        self.__no_steps = self.__no_steps + 1
+        self.__no_taken_steps = self.__no_taken_steps + 1
         self.__toggle_light(x, y)
         if x > 0:
             self.__toggle_light(x - 1, y)
@@ -82,6 +84,9 @@ class GameState:
             if solution_length < shortest_solution_length:
                 shortest_solution_length = solution_length
                 self.__shortest_solution = solution
+                if self.__lights_on == self.__initial_lights_on:
+                    self.__initial_shortest_solution = deepcopy(solution)
+                    self.__initial_shortest_solution_no_steps = solution_length
 
     """
     If previously the solutions for the game were specified, then returns a step (x, y) meaning that by switching 
@@ -115,18 +120,34 @@ class GameState:
 
     def reset_to_initial_state(self):
         self.__lights_on = deepcopy(self.__initial_lights_on)
-        self.__shortest_solution = None
-        self.__no_steps = 0
+        self.__shortest_solution = deepcopy(self.__initial_shortest_solution)
+        self.__no_taken_steps = 0
 
     """
     Returns the total number of steps since the game was started/reset.
     """
 
     def get_total_no_steps(self):
-        return self.__no_steps
+        return self.__no_taken_steps
 
+    """
+    Returns the state of the light bulbs, organized in a list of lists.
+    """
     def get_lights_state(self):
         return deepcopy(self.__lights_on)
+
+    """
+    Returns true if and only if the shortest solution to the winning state from the initial state is known. 
+    Otherwise false. 
+    """
+    def has_known_shortest_solution_from_initial_state(self):
+        return self.__initial_shortest_solution is not None
+
+    """
+    Returns the number of steps in the shortest solution from the initial state to the winning state.
+    """
+    def length_of_shortest_solution_from_initial_state(self):
+        return self.__initial_shortest_solution_no_steps
 
     def __toggle_light(self, x, y):
         self.__lights_on[x][y] = 1 - self.__lights_on[x][y]

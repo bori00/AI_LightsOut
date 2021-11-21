@@ -1,0 +1,323 @@
+============================== Prover9 ===============================
+Prover9 (64) version 2017-11A (CIIRC), November 2017.
+Process 94626 was started by os on ubuntu,
+Sun Nov 21 12:17:48 2021
+The command was "prover9 -f AllProver9Mace4Code/allout_solver_A.in".
+============================== end of head ===========================
+
+============================== INPUT =================================
+
+% Reading from file AllProver9Mace4Code/allout_solver_A.in
+
+set(production).
+    % set(production) -> set(raw).
+    % set(raw) -> clear(auto).
+    % clear(auto) -> clear(auto_inference).
+    % clear(auto) -> clear(auto_setup).
+    % clear(auto_setup) -> clear(predicate_elim).
+    % clear(auto_setup) -> assign(eq_defs, pass).
+    % clear(auto) -> clear(auto_limits).
+    % clear(auto_limits) -> assign(max_weight, "1000000000000.000").
+    % clear(auto_limits) -> assign(sos_limit, -1).
+    % clear(auto) -> clear(auto_denials).
+    % clear(auto) -> clear(auto_process).
+    % set(raw) -> clear(ordered_res).
+    % set(raw) -> clear(ordered_para).
+    % set(raw) -> set(para_into_vars).
+    % set(raw) -> set(para_from_small).
+    % set(raw) -> clear(ordered_para).
+    % set(raw) -> clear(back_demod).
+    % set(raw) -> clear(cac_redundancy).
+    % set(raw) -> assign(backsub_check, 2147483647).
+    % set(raw) -> set(lightest_first).
+    % set(lightest_first) -> assign(weight_part, 1).
+    % set(lightest_first) -> assign(age_part, 0).
+    % set(lightest_first) -> assign(false_part, 0).
+    % set(lightest_first) -> assign(true_part, 0).
+    % set(lightest_first) -> assign(random_part, 0).
+    % set(raw) -> assign(literal_selection, none).
+    % set(production) -> set(eval_rewrite).
+    % set(production) -> set(hyper_resolution).
+    % set(hyper_resolution) -> set(pos_hyper_resolution).
+    % set(production) -> clear(back_subsume).
+set(prolog_style_variables).
+assign(max_megs,1000).
+
+formulas(usable).
+state([F:R]) -> state(toggleVector([F:R],1,1)) # answer(1).
+state([F:R]) -> state(toggleVector([F:R],2,1)) # answer(2).
+state([F:R]) -> state(toggleVector([F:R],3,1)) # answer(3).
+state([F:R]) -> state(toggleVector([F:R],4,1)) # answer(4).
+state([F:R]) -> state(toggleVector([F:R],5,1)) # answer(5).
+state([F:R]) -> state(toggleVector([F:R],6,1)) # answer(6).
+state([F:R]) -> state(toggleVector([F:R],7,1)) # answer(7).
+state([F:R]) -> state(toggleVector([F:R],8,1)) # answer(8).
+state([F:R]) -> state(toggleVector([F:R],9,1)) # answer(9).
+state([F:R]) -> state(toggleVector([F:R],10,1)) # answer(10).
+state([F:R]) -> state(toggleVector([F:R],11,1)) # answer(11).
+state([F:R]) -> state(toggleVector([F:R],12,1)) # answer(12).
+state([F:R]) -> state(toggleVector([F:R],13,1)) # answer(13).
+state([F:R]) -> state(toggleVector([F:R],14,1)) # answer(14).
+state([F:R]) -> state(toggleVector([F:R],15,1)) # answer(15).
+state([F:R]) -> state(toggleVector([F:R],16,1)) # answer(16).
+state([F:R]) -> state(toggleVector([F:R],17,1)) # answer(17).
+state([F:R]) -> state(toggleVector([F:R],18,1)) # answer(18).
+state([F:R]) -> state(toggleVector([F:R],19,1)) # answer(19).
+state([F:R]) -> state(toggleVector([F:R],20,1)) # answer(20).
+state([F:R]) -> state(toggleVector([F:R],21,1)) # answer(21).
+state([F:R]) -> state(toggleVector([F:R],22,1)) # answer(22).
+state([F:R]) -> state(toggleVector([F:R],23,1)) # answer(23).
+state([F:R]) -> state(toggleVector([F:R],24,1)) # answer(24).
+state([F:R]) -> state(toggleVector([F:R],25,1)) # answer(25).
+end_of_list.
+
+formulas(assumptions).
+state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).
+end_of_list.
+
+formulas(goals).
+state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).
+end_of_list.
+
+formulas(demodulators).
+neighbor(X,Y) <-> -(X == 5 | X == 10 | X == 15 | X == 20 | X == 25) & X + 1 == Y | X == Y | X + 5 == Y | -(Y == 5 | Y == 10 | Y == 15 | Y == 20 | Y == 25) & Y + 1 == X | Y + 5 == X.
+toggle(0) = 1.
+toggle(1) = 0.
+toggleVector([],S,C) = [].
+toggleVector([F:R],S,C) = if(neighbor(S,C),[toggle(F):toggleVector(R,S,C + 1)],[F:toggleVector(R,S,C + 1)]).
+end_of_list.
+
+============================== end of input ==========================
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 state([F:R]) -> state(toggleVector([F:R],1,1)) # answer(1) # label(non_clause).  [assumption].
+2 state([F:R]) -> state(toggleVector([F:R],2,1)) # answer(2) # label(non_clause).  [assumption].
+3 state([F:R]) -> state(toggleVector([F:R],3,1)) # answer(3) # label(non_clause).  [assumption].
+4 state([F:R]) -> state(toggleVector([F:R],4,1)) # answer(4) # label(non_clause).  [assumption].
+5 state([F:R]) -> state(toggleVector([F:R],5,1)) # answer(5) # label(non_clause).  [assumption].
+6 state([F:R]) -> state(toggleVector([F:R],6,1)) # answer(6) # label(non_clause).  [assumption].
+7 state([F:R]) -> state(toggleVector([F:R],7,1)) # answer(7) # label(non_clause).  [assumption].
+8 state([F:R]) -> state(toggleVector([F:R],8,1)) # answer(8) # label(non_clause).  [assumption].
+9 state([F:R]) -> state(toggleVector([F:R],9,1)) # answer(9) # label(non_clause).  [assumption].
+10 state([F:R]) -> state(toggleVector([F:R],10,1)) # answer(10) # label(non_clause).  [assumption].
+11 state([F:R]) -> state(toggleVector([F:R],11,1)) # answer(11) # label(non_clause).  [assumption].
+12 state([F:R]) -> state(toggleVector([F:R],12,1)) # answer(12) # label(non_clause).  [assumption].
+13 state([F:R]) -> state(toggleVector([F:R],13,1)) # answer(13) # label(non_clause).  [assumption].
+14 state([F:R]) -> state(toggleVector([F:R],14,1)) # answer(14) # label(non_clause).  [assumption].
+15 state([F:R]) -> state(toggleVector([F:R],15,1)) # answer(15) # label(non_clause).  [assumption].
+16 state([F:R]) -> state(toggleVector([F:R],16,1)) # answer(16) # label(non_clause).  [assumption].
+17 state([F:R]) -> state(toggleVector([F:R],17,1)) # answer(17) # label(non_clause).  [assumption].
+18 state([F:R]) -> state(toggleVector([F:R],18,1)) # answer(18) # label(non_clause).  [assumption].
+19 state([F:R]) -> state(toggleVector([F:R],19,1)) # answer(19) # label(non_clause).  [assumption].
+20 state([F:R]) -> state(toggleVector([F:R],20,1)) # answer(20) # label(non_clause).  [assumption].
+21 state([F:R]) -> state(toggleVector([F:R],21,1)) # answer(21) # label(non_clause).  [assumption].
+22 state([F:R]) -> state(toggleVector([F:R],22,1)) # answer(22) # label(non_clause).  [assumption].
+23 state([F:R]) -> state(toggleVector([F:R],23,1)) # answer(23) # label(non_clause).  [assumption].
+24 state([F:R]) -> state(toggleVector([F:R],24,1)) # answer(24) # label(non_clause).  [assumption].
+25 state([F:R]) -> state(toggleVector([F:R],25,1)) # answer(25) # label(non_clause).  [assumption].
+26 state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # label(non_clause) # label(goal).  [goal].
+
+============================== end of process non-clausal formulas ===
+
+============================== PROCESS INITIAL CLAUSES ===============
+
+% Clauses before input processing:
+
+formulas(usable).
+-state([A:B]) | state(toggleVector([A:B],1,1)) # answer(1).  [clausify(1)].
+-state([A:B]) | state(toggleVector([A:B],2,1)) # answer(2).  [clausify(2)].
+-state([A:B]) | state(toggleVector([A:B],3,1)) # answer(3).  [clausify(3)].
+-state([A:B]) | state(toggleVector([A:B],4,1)) # answer(4).  [clausify(4)].
+-state([A:B]) | state(toggleVector([A:B],5,1)) # answer(5).  [clausify(5)].
+-state([A:B]) | state(toggleVector([A:B],6,1)) # answer(6).  [clausify(6)].
+-state([A:B]) | state(toggleVector([A:B],7,1)) # answer(7).  [clausify(7)].
+-state([A:B]) | state(toggleVector([A:B],8,1)) # answer(8).  [clausify(8)].
+-state([A:B]) | state(toggleVector([A:B],9,1)) # answer(9).  [clausify(9)].
+-state([A:B]) | state(toggleVector([A:B],10,1)) # answer(10).  [clausify(10)].
+-state([A:B]) | state(toggleVector([A:B],11,1)) # answer(11).  [clausify(11)].
+-state([A:B]) | state(toggleVector([A:B],12,1)) # answer(12).  [clausify(12)].
+-state([A:B]) | state(toggleVector([A:B],13,1)) # answer(13).  [clausify(13)].
+-state([A:B]) | state(toggleVector([A:B],14,1)) # answer(14).  [clausify(14)].
+-state([A:B]) | state(toggleVector([A:B],15,1)) # answer(15).  [clausify(15)].
+-state([A:B]) | state(toggleVector([A:B],16,1)) # answer(16).  [clausify(16)].
+-state([A:B]) | state(toggleVector([A:B],17,1)) # answer(17).  [clausify(17)].
+-state([A:B]) | state(toggleVector([A:B],18,1)) # answer(18).  [clausify(18)].
+-state([A:B]) | state(toggleVector([A:B],19,1)) # answer(19).  [clausify(19)].
+-state([A:B]) | state(toggleVector([A:B],20,1)) # answer(20).  [clausify(20)].
+-state([A:B]) | state(toggleVector([A:B],21,1)) # answer(21).  [clausify(21)].
+-state([A:B]) | state(toggleVector([A:B],22,1)) # answer(22).  [clausify(22)].
+-state([A:B]) | state(toggleVector([A:B],23,1)) # answer(23).  [clausify(23)].
+-state([A:B]) | state(toggleVector([A:B],24,1)) # answer(24).  [clausify(24)].
+-state([A:B]) | state(toggleVector([A:B],25,1)) # answer(25).  [clausify(25)].
+end_of_list.
+
+formulas(sos).
+state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [assumption].
+-state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [deny(26)].
+end_of_list.
+
+formulas(demodulators).
+neighbor(X,Y) <-> -(X == 5 | X == 10 | X == 15 | X == 20 | X == 25) & X + 1 == Y | X == Y | X + 5 == Y | -(Y == 5 | Y == 10 | Y == 15 | Y == 20 | Y == 25) & Y + 1 == X | Y + 5 == X.  [assumption].
+toggle(0) = 1.  [assumption].
+toggle(1) = 0.  [assumption].
+toggleVector([],A,B) = [].  [assumption].
+toggleVector([A:B],C,D) = if(neighbor(C,D),[toggle(A):toggleVector(B,C,D + 1)],[A:toggleVector(B,C,D + 1)]).  [assumption].
+end_of_list.
+
+Term ordering decisions:
+Predicate symbol precedence:  predicate_order([ =, state, neighbor, == ]).
+Function symbol precedence:  function_order([ 1, 0, $nil, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 3, 4, 5, 6, 7, 8, 9, $cons, +, toggle, toggleVector ]).
+After inverse_order:  (no changes).
+
+kept:      57 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [assumption].
+kept:      58 -state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [deny(26)].
+
+============================== end of process initial clauses ========
+
+============================== CLAUSES FOR SEARCH ====================
+
+% Clauses after input processing:
+
+formulas(usable).
+27 -state([A:B]) | state(toggleVector([A:B],1,1)) # answer(1).  [clausify(1)].
+28 -state([A:B]) | state(toggleVector([A:B],2,1)) # answer(2).  [clausify(2)].
+29 -state([A:B]) | state(toggleVector([A:B],3,1)) # answer(3).  [clausify(3)].
+30 -state([A:B]) | state(toggleVector([A:B],4,1)) # answer(4).  [clausify(4)].
+31 -state([A:B]) | state(toggleVector([A:B],5,1)) # answer(5).  [clausify(5)].
+32 -state([A:B]) | state(toggleVector([A:B],6,1)) # answer(6).  [clausify(6)].
+33 -state([A:B]) | state(toggleVector([A:B],7,1)) # answer(7).  [clausify(7)].
+34 -state([A:B]) | state(toggleVector([A:B],8,1)) # answer(8).  [clausify(8)].
+35 -state([A:B]) | state(toggleVector([A:B],9,1)) # answer(9).  [clausify(9)].
+36 -state([A:B]) | state(toggleVector([A:B],10,1)) # answer(10).  [clausify(10)].
+37 -state([A:B]) | state(toggleVector([A:B],11,1)) # answer(11).  [clausify(11)].
+38 -state([A:B]) | state(toggleVector([A:B],12,1)) # answer(12).  [clausify(12)].
+39 -state([A:B]) | state(toggleVector([A:B],13,1)) # answer(13).  [clausify(13)].
+40 -state([A:B]) | state(toggleVector([A:B],14,1)) # answer(14).  [clausify(14)].
+41 -state([A:B]) | state(toggleVector([A:B],15,1)) # answer(15).  [clausify(15)].
+42 -state([A:B]) | state(toggleVector([A:B],16,1)) # answer(16).  [clausify(16)].
+43 -state([A:B]) | state(toggleVector([A:B],17,1)) # answer(17).  [clausify(17)].
+44 -state([A:B]) | state(toggleVector([A:B],18,1)) # answer(18).  [clausify(18)].
+45 -state([A:B]) | state(toggleVector([A:B],19,1)) # answer(19).  [clausify(19)].
+46 -state([A:B]) | state(toggleVector([A:B],20,1)) # answer(20).  [clausify(20)].
+47 -state([A:B]) | state(toggleVector([A:B],21,1)) # answer(21).  [clausify(21)].
+48 -state([A:B]) | state(toggleVector([A:B],22,1)) # answer(22).  [clausify(22)].
+49 -state([A:B]) | state(toggleVector([A:B],23,1)) # answer(23).  [clausify(23)].
+50 -state([A:B]) | state(toggleVector([A:B],24,1)) # answer(24).  [clausify(24)].
+51 -state([A:B]) | state(toggleVector([A:B],25,1)) # answer(25).  [clausify(25)].
+end_of_list.
+
+formulas(sos).
+57 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [assumption].
+58 -state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [deny(26)].
+end_of_list.
+
+formulas(demodulators).
+52 neighbor(A,B) <-> -(A == 5 | A == 10 | A == 15 | A == 20 | A == 25) & A + 1 == B | A == B | A + 5 == B | -(B == 5 | B == 10 | B == 15 | B == 20 | B == 25) & B + 1 == A | B + 5 == A.  [assumption].
+53 toggle(0) = 1.  [assumption].
+54 toggle(1) = 0.  [assumption].
+55 toggleVector([],A,B) = [].  [assumption].
+56 toggleVector([A:B],C,D) = if(neighbor(C,D),[toggle(A):toggleVector(B,C,D + 1)],[A:toggleVector(B,C,D + 1)]).  [assumption].
+end_of_list.
+
+============================== end of clauses for search =============
+
+============================== SEARCH ================================
+
+% Starting search at 0.01 seconds.
+
+given #1 (I,wt=52): 57 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [assumption].
+
+given #2 (I,wt=52): 58 -state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [deny(26)].
+
+given #3 (W,wt=52): 59 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1]) # answer(25).  [hyper(51,a,57,a),rewrite([56,52,53,55]),eval(468)].
+
+given #4 (W,wt=52): 60 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1]) # answer(24).  [hyper(50,a,57,a),rewrite([56,52,53,55]),eval(505)].
+
+given #5 (W,wt=52): 61 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0]) # answer(23).  [hyper(49,a,57,a),rewrite([56,52,53,55]),eval(503)].
+
+given #6 (W,wt=52): 62 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0]) # answer(22).  [hyper(48,a,57,a),rewrite([56,52,53,55]),eval(503)].
+
+given #7 (W,wt=52): 63 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0]) # answer(21).  [hyper(47,a,57,a),rewrite([56,52,53,55]),eval(505)].
+
+given #8 (W,wt=52): 64 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1]) # answer(20).  [hyper(46,a,57,a),rewrite([56,52,53,55]),eval(436)].
+
+given #9 (W,wt=52): 65 state([1,1,0,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,0,0,0,1,0]) # answer(19).  [hyper(45,a,57,a),rewrite([56,52,53,55]),eval(496)].
+
+given #10 (W,wt=52): 66 state([1,1,0,1,1,1,0,0,0,1,0,0,1,0,0,0,1,1,1,0,0,0,1,0,0]) # answer(18).  [hyper(44,a,57,a),rewrite([56,52,53,55]),eval(493)].
+
+given #11 (W,wt=52): 67 state([1,1,0,1,1,1,0,0,0,1,0,1,0,0,0,1,1,1,0,0,0,1,0,0,0]) # answer(17).  [hyper(43,a,57,a),rewrite([56,52,53,55]),eval(493)].
+
+given #12 (W,wt=52): 68 state([1,1,0,1,1,1,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,0,0,0,0]) # answer(16).  [hyper(42,a,57,a),rewrite([56,52,53,55]),eval(495)].
+
+given #13 (W,wt=52): 69 state([1,1,0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0]) # answer(15).  [hyper(41,a,57,a),rewrite([56,52,54,53,55]),eval(413)].
+
+given #14 (W,wt=52): 70 state([1,1,0,1,1,1,0,0,1,1,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0]) # answer(14).  [hyper(40,a,57,a),rewrite([56,52,53,55]),eval(497)].
+
+given #15 (W,wt=52): 71 state([1,1,0,1,1,1,0,1,0,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0]) # answer(13).  [hyper(39,a,57,a),rewrite([56,52,53,55]),eval(493)].
+
+given #16 (W,wt=52): 72 state([1,1,0,1,1,1,1,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0]) # answer(12).  [hyper(38,a,57,a),rewrite([56,52,53,55]),eval(493)].
+
+given #17 (W,wt=52): 73 state([1,1,0,1,1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0]) # answer(11).  [hyper(37,a,57,a),rewrite([56,52,54,53,55]),eval(495)].
+
+given #18 (W,wt=52): 74 state([1,1,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]) # answer(10).  [hyper(36,a,57,a),rewrite([56,52,54,53,55]),eval(390)].
+
+given #19 (W,wt=52): 75 state([1,1,0,0,1,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]) # answer(9).  [hyper(35,a,57,a),rewrite([56,52,54,53,55]),eval(498)].
+
+given #20 (W,wt=52): 76 state([1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(8).  [hyper(34,a,57,a),rewrite([56,52,53,55]),eval(493)].
+
+given #21 (W,wt=52): 77 state([1,0,0,1,1,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(7).  [hyper(33,a,57,a),rewrite([56,52,54,53,55]),eval(493)].
+
+given #22 (W,wt=52): 78 state([0,1,0,1,1,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(6).  [hyper(32,a,57,a),rewrite([56,52,54,53,55]),eval(495)].
+
+given #23 (W,wt=52): 79 state([1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(5).  [hyper(31,a,57,a),rewrite([56,52,54,55]),eval(367)].
+
+============================== PROOF =================================
+
+% Proof 1 at 0.07 (+ 0.01) seconds: 1 # 5.
+% Length of proof is 14.
+% Level of proof is 4.
+% Maximum clause weight is 52.000.
+% Given clauses 23 (5.750 givens/level).
+
+1 state([F:R]) -> state(toggleVector([F:R],1,1)) # answer(1) # label(non_clause).  [assumption].
+5 state([F:R]) -> state(toggleVector([F:R],5,1)) # answer(5) # label(non_clause).  [assumption].
+26 state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # label(non_clause) # label(goal).  [goal].
+27 -state([A:B]) | state(toggleVector([A:B],1,1)) # answer(1).  [clausify(1)].
+31 -state([A:B]) | state(toggleVector([A:B],5,1)) # answer(5).  [clausify(5)].
+52 neighbor(A,B) <-> -(A == 5 | A == 10 | A == 15 | A == 20 | A == 25) & A + 1 == B | A == B | A + 5 == B | -(B == 5 | B == 10 | B == 15 | B == 20 | B == 25) & B + 1 == A | B + 5 == A.  [assumption].
+54 toggle(1) = 0.  [assumption].
+55 toggleVector([],A,B) = [].  [assumption].
+56 toggleVector([A:B],C,D) = if(neighbor(C,D),[toggle(A):toggleVector(B,C,D + 1)],[A:toggleVector(B,C,D + 1)]).  [assumption].
+57 state([1,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [assumption].
+58 -state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]).  [deny(26)].
+79 state([1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(5).  [hyper(31,a,57,a),rewrite([56,52,54,55]),eval(367)].
+377 state([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) # answer(1) # answer(5).  [hyper(27,a,79,a),rewrite([56,52,54,55]),eval(495)].
+378 $F # answer(1) # answer(5).  [resolve(377,a,58,a)].
+
+============================== end of proof ==========================
+
+============================== STATISTICS ============================
+
+Given=23. Generated=552. Kept=321. proofs=1.
+Usable=48. Sos=294. Demods=5. Limbo=3, Disabled=2. Hints=0.
+Kept_by_rule=0, Deleted_by_rule=0.
+Forward_subsumed=231. Back_subsumed=0.
+Sos_limit_deleted=0. Sos_displaced=0. Sos_removed=0.
+New_demodulators=0 (0 lex), Back_demodulated=0. Back_unit_deleted=0.
+Demod_attempts=0. Demod_rewrites=0.
+Res_instance_prunes=0. Para_instance_prunes=0. Basic_paramod_prunes=0.
+Nonunit_fsub_feature_tests=0. Nonunit_bsub_feature_tests=0.
+Megabytes=1.26.
+User_CPU=0.07, System_CPU=0.01, Wall_clock=0.
+
+============================== end of statistics =====================
+
+============================== end of search =========================
+
+THEOREM PROVED
+
+Exiting with 1 proof.
+
+Process 94626 exit (max_proofs) Sun Nov 21 12:17:48 2021

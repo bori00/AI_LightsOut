@@ -35,9 +35,11 @@ state([F:R]) -> state(toggleVector([F:R], 25, 1)) #answer (25).
 end_of_list.
 
 formulas(assumptions).
-%state([1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0]).  % initial state: given puzzle, 5 steps
-%state([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0 ]).  % initial state: puzzle 13 (8 steps)
-state([0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1]).  % initial state: puzzle 6 (6 steps)
+state([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0 ]).  % initial state: M4 (8 steps)
+%state([0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1]).  % initial state: M3 (6 steps)
+%state([1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).  % initial state: M1 (2 steps)
+%state([1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0]).  % initial state: M2 (5 steps)
+%state([1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1]). % initial state: M5 (15 steps)
 end_of_list.
 
 formulas(goals).

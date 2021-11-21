@@ -1,8 +1,7 @@
 from ttk import Style
-
-from tkinter import *
+from Tkinter import *
 from PIL import Image, ImageTk
-from tkinter import E, S, N, W
+from Tkinter import E, S, N, W
 from os import *
 from GameService import GameService
 
@@ -17,8 +16,6 @@ WINDOW_MARGIN_Y = 10
 This class is responsible for displaying the interface of the game 
 and handle user actions.
 """
-
-
 class TileGame:
 
     def __init__(self, no_tiles):
@@ -35,6 +32,9 @@ class TileGame:
         self.window.geometry(
             WINDOW_WIDTH.__str__() + 'x' + WINDOW_HEIGHT.__str__())
         self.window.minsize(250, 350)
+        self.window.tk.call("source","ttk-theme/forest-dark.tcl")
+        style = Style()
+        style.theme_use("forest-dark")
 
     def __init_board_panel(self):
         self.board_panel = PanedWindow(master=self.window,
@@ -71,24 +71,25 @@ class TileGame:
             Image.open("images/greyButton.png").resize((
                 BOARD_WIDTH / self.no_tiles,
                 BOARD_HEIGHT / self.no_tiles)))
-        self.tile_state = {0: image_led_on, 1: image_led_off}
+        self.tile_state = {0: image_led_off, 1: image_led_on}
 
         self.no_frames = self.__count_images_in_gif_dir(
             "images/animatedButton")
         self.frames = [ImageTk.PhotoImage(Image.open(
-            "images/animatedButton/rotatingButton{}.png".format(
+            "images/animatedButton/greenButton{}.png".format(
                 i + 1)).resize((BOARD_WIDTH / self.no_tiles,
                                 BOARD_HEIGHT / self.no_tiles))) for i
                        in range(self.no_frames)]
         self.hint_animation_id = None
         self.solution_animation_id = None
 
-    def __count_images_in_gif_dir(self, dir_name):
-        noImages = 0
+    @staticmethod
+    def __count_images_in_gif_dir(dir_name):
+        no_images = 0
         for base, dirs, files in walk(dir_name):
             for _ in files:
-                noImages += 1
-        return noImages
+                no_images += 1
+        return no_images
 
     def __refresh_board(self):
         lights_on = self.game_service.get_lights_state()
@@ -123,7 +124,7 @@ class TileGame:
     def __animate_hint(self, x, y, index):
         self.tiles[x][y].config(image=self.frames[index])
         index = (index + 1) % self.no_frames
-        self.hint_animation_id = self.window.after(50,
+        self.hint_animation_id = self.window.after(100,
                                                    lambda:
                                                    self.__animate_hint(
                                                        x, y, index))
@@ -135,8 +136,9 @@ class TileGame:
         self.__refresh_board()
 
     def __on_hint(self):
-        (x, y) = self.game_service.get_hint()
-        self.__animate_hint(x, y, index=0)
+        if not self.game_service.won_game_session():
+            (x, y) = self.game_service.get_hint()
+            self.__animate_hint(x, y, index=0)
 
     def __on_reset(self):
         self.game_service.reset_game_session()
@@ -145,13 +147,15 @@ class TileGame:
     def __animate_solution(self):
         if self.game_service.won_game_session():
             self.window.after_cancel(self.solution_animation_id)
+            return
         next_hint = self.game_service.get_hint()
         self.__on_flip(next_hint[0], next_hint[1])
-        self.solution_animation_id = self.window.after(200,
+        self.solution_animation_id = self.window.after(400,
                                                        self.__animate_solution)
 
     def __on_solve(self):
-        self.__animate_solution()
+        if not self.game_service.won_game_session():
+            self.__animate_solution()
 
     def run(self):
         self.window.mainloop()

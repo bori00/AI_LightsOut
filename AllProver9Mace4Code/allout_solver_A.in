@@ -1,0 +1,62 @@
+% Solution for the Light Out problem. Inefficient.
+set(production).
+set(prolog_style_variables).
+
+assign(max_megs, 1000).
+
+formulas(usable).
+
+state([F:R]) -> state(toggleVector([F:R],  1, 1)) #answer (1).
+state([F:R]) -> state(toggleVector([F:R],  2, 1)) #answer (2).
+state([F:R]) -> state(toggleVector([F:R],  3, 1)) #answer (3).
+state([F:R]) -> state(toggleVector([F:R],  4, 1)) #answer (4).
+state([F:R]) -> state(toggleVector([F:R],  5, 1)) #answer (5).
+state([F:R]) -> state(toggleVector([F:R],  6, 1)) #answer (6).
+state([F:R]) -> state(toggleVector([F:R],  7, 1)) #answer (7).
+state([F:R]) -> state(toggleVector([F:R],  8, 1)) #answer (8).
+state([F:R]) -> state(toggleVector([F:R],  9, 1)) #answer (9).
+state([F:R]) -> state(toggleVector([F:R], 10, 1)) #answer (10).
+state([F:R]) -> state(toggleVector([F:R], 11, 1)) #answer (11).
+state([F:R]) -> state(toggleVector([F:R], 12, 1)) #answer (12).
+state([F:R]) -> state(toggleVector([F:R], 13, 1)) #answer (13).
+state([F:R]) -> state(toggleVector([F:R], 14, 1)) #answer (14).
+state([F:R]) -> state(toggleVector([F:R], 15, 1)) #answer (15).
+state([F:R]) -> state(toggleVector([F:R], 16, 1)) #answer (16).
+state([F:R]) -> state(toggleVector([F:R], 17, 1)) #answer (17).
+state([F:R]) -> state(toggleVector([F:R], 18, 1)) #answer (18).
+state([F:R]) -> state(toggleVector([F:R], 19, 1)) #answer (19).
+state([F:R]) -> state(toggleVector([F:R], 20, 1)) #answer (20).
+state([F:R]) -> state(toggleVector([F:R], 21, 1)) #answer (21).
+state([F:R]) -> state(toggleVector([F:R], 22, 1)) #answer (22).
+state([F:R]) -> state(toggleVector([F:R], 23, 1)) #answer (23).
+state([F:R]) -> state(toggleVector([F:R], 24, 1)) #answer (24).
+state([F:R]) -> state(toggleVector([F:R], 25, 1)) #answer (25).
+
+end_of_list.
+
+formulas(assumptions).
+%state([1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0]).  % initial state: given puzzle, 5 steps
+%state([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0 ]).  % initial state: puzzle 13 (8 steps)
+state([0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1]).  % initial state: puzzle 6 (6 steps)
+end_of_list.
+
+formulas(goals).
+state([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).  % goal state: all light bulbs are off
+end_of_list.
+
+formulas(demodulators).
+
+neighbor(X, Y) <-> (-(X == 5 | X == 10 | X == 15 | X == 20 | X == 25) & X+1 == Y) |
+                   X == Y |
+                   X+5 == Y |
+                   (-(Y == 5 | Y == 10 | Y == 15 | Y == 20 | Y == 25) & Y+1 == X) |
+                   Y+5 == X.
+
+toggle(0) = 1.
+toggle(1) = 0.
+
+toggleVector([], S, C) = [].
+toggleVector([F:R], S, C) = if(neighbor(S, C),[toggle(F):toggleVector(R, S, C+1)],[F:toggleVector(R, S, C+1)]).
+
+                 
+end_of_list.

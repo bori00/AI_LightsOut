@@ -20,9 +20,9 @@ class GameState:
     """
 
     def __init__(self, lights_on):
-        self.initial_lights_on = deepcopy(lights_on)
-        self.lights_on = lights_on
-        self.shortest_solution = None
+        self.__initial_lights_on = deepcopy(lights_on)
+        self.__lights_on = lights_on
+        self.__shortest_solution = None
         self.__no_steps = 0;
 
     """
@@ -30,7 +30,7 @@ class GameState:
     """
 
     def is_winning(self):
-        return all(not any(map(bool, lights_row)) for lights_row in self.lights_on)
+        return all(not any(map(bool, lights_row)) for lights_row in self.__lights_on)
 
     """
     Switches the light bulb in position (x, y).
@@ -57,11 +57,11 @@ class GameState:
             self.__toggle_light(x, y - 1)
         if y + 1 < GameState.no_cols:
             self.__toggle_light(x, y + 1)
-        if self.shortest_solution is not None:
-            if self.shortest_solution[x][y] == 1:
-                self.shortest_solution[x][y] = 0.
+        if self.__shortest_solution is not None:
+            if self.__shortest_solution[x][y] == 1:
+                self.__shortest_solution[x][y] = 0.
             else:
-                self.shortest_solution = None
+                self.__shortest_solution = None
 
     """
     Informs the GameState about the solutions for the problem from the current state.
@@ -81,7 +81,7 @@ class GameState:
             solution_length = sum([toggle for sublist in solution for toggle in sublist])
             if solution_length < shortest_solution_length:
                 shortest_solution_length = solution_length
-                self.shortest_solution = solution
+                self.__shortest_solution = solution
 
     """
     If previously the solutions for the game were specified, then returns a step (x, y) meaning that by switching 
@@ -90,8 +90,8 @@ class GameState:
     """
 
     def get_hint_for_next_step(self):
-        if self.shortest_solution is not None:
-            solution_vector = [toggle for sublist in self.shortest_solution for toggle in sublist]
+        if self.__shortest_solution is not None:
+            solution_vector = [toggle for sublist in self.__shortest_solution for toggle in sublist]
             required_steps = [i for i, toggle in enumerate(solution_vector) if toggle == 1]
             hinted_step_vector_index = random.choice(required_steps)
             hinted_step_row = hinted_step_vector_index / GameState.no_cols
@@ -107,19 +107,26 @@ class GameState:
     """
 
     def has_shortest_solution(self):
-        return self.shortest_solution is not None
+        return self.__shortest_solution is not None
 
     """
     Resets the game to its initial state.
     """
 
     def reset_to_initial_state(self):
-        self.lights_on = deepcopy(self.initial_lights_on)
-        self.shortest_solution = None
+        self.__lights_on = deepcopy(self.__initial_lights_on)
+        self.__shortest_solution = None
         self.__no_steps = 0
+
+    """
+    Returns the total number of steps since the game was started/reset.
+    """
 
     def get_total_no_steps(self):
         return self.__no_steps
 
+    def get_lights_state(self):
+        return deepcopy(self.__lights_on)
+
     def __toggle_light(self, x, y):
-        self.lights_on[x][y] = 1 - self.lights_on[x][y]
+        self.__lights_on[x][y] = 1 - self.__lights_on[x][y]

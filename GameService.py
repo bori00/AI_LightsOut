@@ -70,8 +70,17 @@ class GameService:
             self.game_state.set_solutions(game_solutions)
             return self.game_state.get_hint_for_next_step()
 
+    """
+    Resets the game session to its original state.
+    """
     def reset_game_session(self):
         self.game_state.reset_to_initial_state()
+
+    """
+    Returns the number of steps taken since the last game session was started/reset to its initial state.
+    """
+    def get_no_steps_in_game_session(self):
+        return self.game_state.get_total_no_steps()
 
     def _generate_game_solutions(self):
         try:
@@ -167,5 +176,5 @@ for i in range(3):
             print game_service.game_state.lights_on
             print "Game shortest solution:"
             print game_service.game_state.shortest_solution
-
+    print "No steps: " + str(game_service.get_no_steps_in_game_session())
     game_service.init_new_game_session()

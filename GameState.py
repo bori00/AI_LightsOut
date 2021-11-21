@@ -23,6 +23,7 @@ class GameState:
         self.initial_lights_on = deepcopy(lights_on)
         self.lights_on = lights_on
         self.shortest_solution = None
+        self.__no_steps = 0;
 
     """
     Returns true if and only if the game is won.
@@ -46,6 +47,7 @@ class GameState:
 
     def switch_light(self, x, y):
         assert 0 <= x < GameState.no_rows and 0 <= y < GameState.no_cols
+        self.__no_steps = self.__no_steps + 1
         self.__toggle_light(x, y)
         if x > 0:
             self.__toggle_light(x - 1, y)
@@ -114,6 +116,10 @@ class GameState:
     def reset_to_initial_state(self):
         self.lights_on = deepcopy(self.initial_lights_on)
         self.shortest_solution = None
+        self.__no_steps = 0
+
+    def get_total_no_steps(self):
+        return self.__no_steps
 
     def __toggle_light(self, x, y):
         self.lights_on[x][y] = 1 - self.lights_on[x][y]

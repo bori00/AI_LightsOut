@@ -1,0 +1,374 @@
+============================== Mace4 =================================
+Mace4 (64) version 2017-11A (CIIRC), November 2017.
+Process 5081 was started by os on ubuntu,
+Sat Nov 20 16:22:10 2021
+The command was "mace4 -m -1 -f allout_solver_B.in".
+============================== end of head ===========================
+
+============================== INPUT =================================
+
+% Reading from file allout_solver_B.in
+
+set(prolog_style_variables).
+set(arithmetic).
+    % set(arithmetic) -> clear(lnh).
+    % set(arithmetic) -> assign(selection_order, 0).
+
+    % Declaring Mace4 arithmetic parse types.
+assign(domain_size,7).
+    % assign(domain_size, 7) -> assign(start_size, 7).
+    % assign(domain_size, 7) -> assign(end_size, 7).
+
+formulas(usable).
+(all X all Y (Switch(X,Y) = 0 | Switch(X,Y) = 1)).
+(all X (Switch(X,0) = 0 & Switch(X,6) = 0)).
+(all Y (Switch(0,Y) = 0 & Switch(6,Y) = 0)).
+Xor(X,Y) = 1 <-> X = 1 & Y = 0 | X = 0 & Y = 1.
+Xor(X,Y) != 1 <-> Xor(X,Y) = 0.
+X >= 1 & X <= 5 & Y >= 1 & Y <= 5 & Z = X + 1 & X = U + 1 & V = Y + 1 & Y = W + 1 -> (OddToggles(X,Y) <-> Xor(Xor(Xor(Switch(X,V),Switch(X,W)),Xor(Switch(U,Y),Switch(Z,Y))),Switch(X,Y)) = 1).
+On(X,Y) = 1 <-> OddToggles(X,Y).
+On(X,Y) = 0 <-> -OddToggles(X,Y).
+end_of_list.
+
+formulas(assumptions).
+On(0,0) = 0.
+On(0,1) = 0.
+On(0,2) = 0.
+On(0,3) = 0.
+On(0,4) = 0.
+On(0,5) = 0.
+On(0,6) = 0.
+On(1,0) = 0.
+On(1,1) = 1.
+On(1,2) = 0.
+On(1,3) = 0.
+On(1,4) = 0.
+On(1,5) = 1.
+On(1,6) = 0.
+On(2,0) = 0.
+On(2,1) = 0.
+On(2,2) = 0.
+On(2,3) = 0.
+On(2,4) = 0.
+On(2,5) = 0.
+On(2,6) = 0.
+On(3,0) = 0.
+On(3,1) = 0.
+On(3,2) = 0.
+On(3,3) = 0.
+On(3,4) = 0.
+On(3,5) = 0.
+On(3,6) = 0.
+On(4,0) = 0.
+On(4,1) = 0.
+On(4,2) = 1.
+On(4,3) = 0.
+On(4,4) = 1.
+On(4,5) = 0.
+On(4,6) = 0.
+On(5,0) = 0.
+On(5,1) = 0.
+On(5,2) = 0.
+On(5,3) = 1.
+On(5,4) = 1.
+On(5,5) = 1.
+On(5,6) = 0.
+On(6,0) = 0.
+On(6,1) = 0.
+On(6,2) = 0.
+On(6,3) = 0.
+On(6,4) = 0.
+On(6,5) = 0.
+On(6,6) = 0.
+end_of_list.
+
+formulas(goals).
+end_of_list.
+
+% From the command line: assign(max_models, -1).
+
+============================== end of input ==========================
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 (all X all Y (Switch(X,Y) = 0 | Switch(X,Y) = 1)) # label(non_clause).  [assumption].
+2 (all X (Switch(X,0) = 0 & Switch(X,6) = 0)) # label(non_clause).  [assumption].
+3 (all Y (Switch(0,Y) = 0 & Switch(6,Y) = 0)) # label(non_clause).  [assumption].
+4 Xor(X,Y) = 1 <-> X = 1 & Y = 0 | X = 0 & Y = 1 # label(non_clause).  [assumption].
+5 Xor(X,Y) != 1 <-> Xor(X,Y) = 0 # label(non_clause).  [assumption].
+6 X >= 1 & X <= 5 & Y >= 1 & Y <= 5 & Z = X + 1 & X = U + 1 & V = Y + 1 & Y = W + 1 -> (OddToggles(X,Y) <-> Xor(Xor(Xor(Switch(X,V),Switch(X,W)),Xor(Switch(U,Y),Switch(Z,Y))),Switch(X,Y)) = 1) # label(non_clause).  [assumption].
+7 On(X,Y) = 1 <-> OddToggles(X,Y) # label(non_clause).  [assumption].
+8 On(X,Y) = 0 <-> -OddToggles(X,Y) # label(non_clause).  [assumption].
+
+============================== end of process non-clausal formulas ===
+
+============================== CLAUSES FOR SEARCH ====================
+
+formulas(mace4_clauses).
+Switch(A,B) = 0 | Switch(A,B) = 1.
+Switch(A,0) = 0.
+Switch(A,6) = 0.
+Switch(0,A) = 0.
+Switch(6,A) = 0.
+Xor(A,B) != 1 | 1 = A | 0 = A.
+Xor(A,B) != 1 | 1 = A | 1 = B.
+Xor(A,B) != 1 | 0 = B | 0 = A.
+Xor(A,B) != 1 | 0 = B | 1 = B.
+Xor(A,B) = 1 | 1 != A | 0 != B.
+Xor(A,B) = 1 | 0 != A | 1 != B.
+Xor(A,B) = 1 | Xor(A,B) = 0.
+Xor(A,B) != 1 | Xor(A,B) != 0.
+-(A >= 1) | -(A <= 5) | -(B >= 1) | -(B <= 5) | A + 1 != C | D + 1 != A | B + 1 != E | F + 1 != B | -OddToggles(A,B) | Xor(Xor(Xor(Switch(A,E),Switch(A,F)),Xor(Switch(D,B),Switch(C,B))),Switch(A,B)) = 1.
+-(A >= 1) | -(A <= 5) | -(B >= 1) | -(B <= 5) | A + 1 != C | D + 1 != A | B + 1 != E | F + 1 != B | OddToggles(A,B) | Xor(Xor(Xor(Switch(A,E),Switch(A,F)),Xor(Switch(D,B),Switch(C,B))),Switch(A,B)) != 1.
+On(A,B) != 1 | OddToggles(A,B).
+On(A,B) = 1 | -OddToggles(A,B).
+On(A,B) != 0 | -OddToggles(A,B).
+On(A,B) = 0 | OddToggles(A,B).
+On(0,0) = 0.
+On(0,1) = 0.
+On(0,2) = 0.
+On(0,3) = 0.
+On(0,4) = 0.
+On(0,5) = 0.
+On(0,6) = 0.
+On(1,0) = 0.
+On(1,1) = 1.
+On(1,2) = 0.
+On(1,3) = 0.
+On(1,4) = 0.
+On(1,5) = 1.
+On(1,6) = 0.
+On(2,0) = 0.
+On(2,1) = 0.
+On(2,2) = 0.
+On(2,3) = 0.
+On(2,4) = 0.
+On(2,5) = 0.
+On(2,6) = 0.
+On(3,0) = 0.
+On(3,1) = 0.
+On(3,2) = 0.
+On(3,3) = 0.
+On(3,4) = 0.
+On(3,5) = 0.
+On(3,6) = 0.
+On(4,0) = 0.
+On(4,1) = 0.
+On(4,2) = 1.
+On(4,3) = 0.
+On(4,4) = 1.
+On(4,5) = 0.
+On(4,6) = 0.
+On(5,0) = 0.
+On(5,1) = 0.
+On(5,2) = 0.
+On(5,3) = 1.
+On(5,4) = 1.
+On(5,5) = 1.
+On(5,6) = 0.
+On(6,0) = 0.
+On(6,1) = 0.
+On(6,2) = 0.
+On(6,3) = 0.
+On(6,4) = 0.
+On(6,5) = 0.
+On(6,6) = 0.
+end_of_list.
+
+============================== end of clauses for search =============
+
+% The largest natural number in the input is 6.
+
+============================== DOMAIN SIZE 7 =========================
+
+============================== MODEL =================================
+
+interpretation( 7, [number=1, seconds=0], [
+
+        function(On(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Switch(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 1, 0, 1, 0,
+			   0, 1, 1, 1, 0, 0, 0,
+			   0, 0, 1, 1, 1, 1, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 1, 1, 1, 1, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Xor(_,_), [
+			   0, 1, 0, 0, 0, 0, 0,
+			   1, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        relation(OddToggles(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ])
+]).
+
+============================== end of model ==========================
+
+============================== MODEL =================================
+
+interpretation( 7, [number=2, seconds=0], [
+
+        function(On(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Switch(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 1, 0,
+			   0, 0, 1, 0, 0, 1, 0,
+			   0, 1, 0, 1, 0, 0, 0,
+			   0, 1, 1, 1, 1, 1, 0,
+			   0, 1, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Xor(_,_), [
+			   0, 1, 0, 0, 0, 0, 0,
+			   1, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        relation(OddToggles(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ])
+]).
+
+============================== end of model ==========================
+
+============================== MODEL =================================
+
+interpretation( 7, [number=3, seconds=0], [
+
+        function(On(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Switch(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 0, 1, 0,
+			   0, 0, 1, 1, 1, 1, 0,
+			   0, 1, 1, 1, 1, 1, 0,
+			   0, 0, 1, 0, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Xor(_,_), [
+			   0, 1, 0, 0, 0, 0, 0,
+			   1, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        relation(OddToggles(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ])
+]).
+
+============================== end of model ==========================
+
+============================== MODEL =================================
+
+interpretation( 7, [number=4, seconds=0], [
+
+        function(On(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Switch(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 1, 1, 1, 0, 0,
+			   0, 1, 1, 1, 0, 0, 0,
+			   0, 1, 0, 1, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Xor(_,_), [
+			   0, 1, 0, 0, 0, 0, 0,
+			   1, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        relation(OddToggles(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 1, 0, 1, 0, 0,
+			   0, 0, 0, 1, 1, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ])
+]).
+
+============================== end of model ==========================
+
+============================== STATISTICS ============================
+
+For domain size 7.
+
+Current CPU time: 0.00 seconds (total CPU time: 0.96 seconds).
+Ground clauses: seen=236012, kept=606.
+Selections=646, assignments=4522, propagations=128, current_models=4.
+Rewrite_terms=60606, rewrite_bools=8096, indexes=0.
+Rules_from_neg_clauses=4, cross_offs=71.
+
+============================== end of statistics =====================
+
+User_CPU=0.96, System_CPU=0.00, Wall_clock=1.
+
+Exiting with 4 models.
+
+Process 5081 exit (all_models) Sat Nov 20 16:22:11 2021
+The process finished Sat Nov 20 16:22:11 2021

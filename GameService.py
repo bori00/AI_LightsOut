@@ -13,6 +13,8 @@ Class responsible for the logic of the game:
 All communication between the controller and the service layer should be done via the GameService, and the controller 
 should never access the game state directly. 
 """
+
+
 class GameService:
     NO_GAME_MODELS = 1000
 
@@ -21,63 +23,92 @@ class GameService:
     
     To do this, it generates a list of random solvable puzzles and picks one of them as the starting game session.
     """
+
     def __init__(self):
-        self._generate_random_games(GameService.NO_GAME_MODELS)
-        self._game_models = self._get_generated_game_models()
-        self._played_games = []
-        self.game_state = None
+        self.__generate_random_games(GameService.NO_GAME_MODELS)
+        self.__game_models = self.__get_generated_game_models()
+        self.__played_games = []
+        self.__game_state = None
         self.init_new_game_session()
 
     """Starts a new game session, with a puzzle that was not used before in this game, unless all puzzles have 
     already been used. """
+
     def init_new_game_session(self):
-        if len(self._played_games) == GameService.NO_GAME_MODELS:
-            self._played_games = []
+        if len(self.__played_games) == GameService.NO_GAME_MODELS:
+            self.__played_games = []
         game_model_index = random.randint(0, GameService.NO_GAME_MODELS - 1)
-        while game_model_index in self._played_games:
+        while game_model_index in self.__played_games:
             game_model_index = random.randint(0, GameService.NO_GAME_MODELS - 1)
-        self._played_games.append(game_model_index)
-        self.game_state = GameState(deepcopy(self._game_models[game_model_index]))
+        self.__played_games.append(game_model_index)
+        self.__game_state = GameState(deepcopy(self.__game_models[game_model_index]))
+        self.__set_game_session_solutions()
 
     """
     Returns true if and only if the current game session was won.
     """
+
     def won_game_session(self):
-        return self.game_state.is_winning()
+        return self.__game_state.is_winning()
 
     """
     Switches the light bulb in position (x, y) (indexed from 0) for the current game session.
     """
+
     def switch_light(self, x, y):
-        self.game_state.switch_light(x, y)
+        self.__game_state.switch_light(x, y)
+        if not self.__game_state.has_shortest_solution():
+            self.__set_game_session_solutions()
 
     """
     Returns the state of all light bulbs in the current game session, in the format of a list of lists of integers, 
     where result[x][y] = 1 if the light bulb on position (x, y) is on, and 0 otherwise.
     """
+
     def get_lights_state(self):
-        return deepcopy(self.game_state.lights_on)
+        return self.__game_state.get_lights_state()
 
     """
     Returns a step represented by a tuple with two integers, (x, y), meaning that by switching the light bulb on 
     position (x, y) the winning state will be 1 step closer.
     """
+
     def get_hint(self):
-        if self.game_state.has_shortest_solution():
-            return self.game_state.get_hint_for_next_step()
+        if self.__game_state.has_shortest_solution():
+            return self.__game_state.get_hint_for_next_step()
         else:
-            game_solutions = map(self._cut_first_last_row_col, self._generate_game_solutions())
-            self.game_state.set_solutions(game_solutions)
-            return self.game_state.get_hint_for_next_step()
+            self.__set_game_session_solutions()
+            return self.__game_state.get_hint_for_next_step()
+
+    """
+    Resets the game session to its original state.
+    """
 
     def reset_game_session(self):
-        self.game_state.reset_to_initial_state()
+        self.__game_state.reset_to_initial_state()
 
-    def _generate_game_solutions(self):
+    """
+    Returns the number of steps taken since the last game session was started/reset to its initial state.
+    """
+
+    def get_no_steps_in_game_session(self):
+        return self.__game_state.get_total_no_steps()
+
+    """
+    Returns the number of steps in the shortest solution from the initial state to the winning state.
+    """
+    def length_of_shortest_solution_from_initial_state(self):
+        return self.__game_state.length_of_shortest_solution_from_initial_state()
+
+    def __set_game_session_solutions(self):
+        game_solutions = map(self.__cut_first_last_row_col, self.__generate_game_solutions())
+        self.__game_state.set_solutions(game_solutions)
+
+    def __generate_game_solutions(self):
         try:
             with open("GameSolutions/allout_solver_template.in") as template_file:
                 solver_template = template_file.read()
-                solver_mace4_code = solver_template.format(On=self._generate_game_state_propositions_string())
+                solver_mace4_code = solver_template.format(On=self.__generate_game_state_propositions_string())
                 with open("GameSolutions/allout_solver.in", "w") as solver_file:
                     solver_file.write(solver_mace4_code)
                     solver_file.flush()
@@ -85,7 +116,7 @@ class GameService:
                               "interpformat portable > GameSolutions/allout_solutions.out")
                     with open("GameSolutions/allout_solutions.out") as solutions_file:
                         solutions_data = eval(solutions_file.read())
-                        solutions = map(self._transform_solution_data, solutions_data)
+                        solutions = map(self.__transform_solution_data, solutions_data)
                         return solutions
         except IOError as e:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
@@ -93,14 +124,15 @@ class GameService:
             print "Unexpected error:", sys.exc_info()[0]
         sys.exit(1)
 
-    def _get_generated_game_models(self):
+
+    def __get_generated_game_models(self):
         f = open("GameModels/allout_math_efficient_generated.out")
         game_models_data = eval(f.read())
-        game_models = map(self._transform_game_model_data, game_models_data)
+        game_models = map(self.__transform_game_model_data, game_models_data)
         return game_models
 
-    def _generate_game_state_propositions_string(self):
-        lights_state = deepcopy(self.game_state.lights_on)
+    def __generate_game_state_propositions_string(self):
+        lights_state = self.__game_state.get_lights_state()
         lights_state_propositions = []
         lights_state.append([0] * GameState.no_cols)
         lights_state.insert(0, [0] * GameState.no_cols)
@@ -112,7 +144,7 @@ class GameService:
                     "On({row}, {col})={on}.".format(row=row, col=col, on=light_on))
         return "\n".join(lights_state_propositions)
 
-    def _cut_first_last_row_col(self, matrix):
+    def __cut_first_last_row_col(self, matrix):
         matrix.pop(0)
         matrix.pop(len(matrix) - 1)
         for row in matrix:
@@ -121,51 +153,57 @@ class GameService:
         return matrix
 
     @staticmethod
-    def _generate_random_games(no_game_models):
+    def __generate_random_games(no_game_models):
         os.system("mace4 -m {nr_game_models} -f GameModels/allout_math_efficient_generator.in  | "
                   "interpformat portable > GameModels/allout_math_efficient_generated.out".format(
             nr_game_models=no_game_models))
 
     @staticmethod
-    def _transform_game_model_data(game_model_data):
+    def __transform_game_model_data(game_model_data):
         game_extracted_model = game_model_data[2][7][3]
         return game_extracted_model
 
     @staticmethod
-    def _transform_solution_data(solution_data):
+    def __transform_solution_data(solution_data):
         extracted_solution = solution_data[2][1][3]
         return extracted_solution
 
-#
-# # This code demonstrates the behavior of the service layer
-# game_service = GameService()
-# for i in range(3):
-#     print "----------------------------------------INIT STATE------------------------------------------------"
-#     print game_service.game_state.lights_on
-#     while not game_service.won_game_session():
-#         p = random.uniform(0, 1)
-#         # Take the correct step with a probability of 80%, and a random step with probability 20%
-#         # With prob 1% reset the game
-#         if p <= 0.1:
-#             game_service.reset_game_session()
-#             print "----------------------------------------RESET GAME------------------------------------"
-#             print "Game state:"
-#             print game_service.game_state.lights_on
-#         elif p < 0.2:
-#             rand_step = (random.randint(0, 4), random.randint(0, 4))
-#             game_service.switch_light(rand_step[0], rand_step[1])
-#             print "-------Random Step: ", rand_step
-#             print "Game state:"
-#             print game_service.game_state.lights_on
-#             print "Game shortest solution:"
-#             print game_service.game_state.shortest_solution
-#         else:
-#             hint = game_service.get_hint()
-#             game_service.switch_light(hint[0], hint[1])
-#             print "------------Step: ", hint
-#             print "Game state:"
-#             print game_service.game_state.lights_on
-#             print "Game shortest solution:"
-#             print game_service.game_state.shortest_solution
-#
-#     game_service.init_new_game_session()
+
+#TODO: remove this code before submitting assignment
+# This code demonstrates the behavior of the service layer
+game_service = GameService()
+for i in range(3):
+    print "----------------------------------------INIT STATE------------------------------------------------"
+    print game_service._GameService__game_state._GameState__lights_on
+    print "Game shortest solution:"
+    print game_service._GameService__game_state._GameState__shortest_solution
+    while not game_service.won_game_session():
+        p = random.uniform(0, 1)
+        # Take the correct step with a probability of 80%, and a random step with probability 20%
+        # With prob 1% reset the game
+        if p <= 0.1:
+            game_service.reset_game_session()
+            print "----------------------------------------RESET GAME------------------------------------"
+            print "Game state:"
+            print game_service._GameService__game_state._GameState__lights_on
+            print "Game shortest solution:"
+            print game_service._GameService__game_state._GameState__shortest_solution
+        elif p < 0.2:
+            rand_step = (random.randint(0, 4), random.randint(0, 4))
+            game_service.switch_light(rand_step[0], rand_step[1])
+            print "-------Random Step: ", rand_step
+            print "Game state:"
+            print game_service._GameService__game_state._GameState__lights_on
+            print "Game shortest solution:"
+            print game_service._GameService__game_state._GameState__shortest_solution
+        else:
+            hint = game_service.get_hint()
+            game_service.switch_light(hint[0], hint[1])
+            print "------------Step: ", hint
+            print "Game state:"
+            print game_service._GameService__game_state._GameState__lights_on
+            print "Game shortest solution:"
+            print game_service._GameService__game_state._GameState__shortest_solution
+    print "No steps: " + str(game_service.get_no_steps_in_game_session())
+    print "Min no steps: " + str(game_service.length_of_shortest_solution_from_initial_state())
+    game_service.init_new_game_session()

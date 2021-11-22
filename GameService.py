@@ -169,41 +169,41 @@ class GameService:
         return extracted_solution
 
 
-#TODO: remove this code before submitting assignment
-# This code demonstrates the behavior of the service layer
-game_service = GameService()
-for i in range(3):
-    print "----------------------------------------INIT STATE------------------------------------------------"
-    print game_service._GameService__game_state._GameState__lights_on
-    print "Game shortest solution:"
-    print game_service._GameService__game_state._GameState__shortest_solution
-    while not game_service.won_game_session():
-        p = random.uniform(0, 1)
-        # Take the correct step with a probability of 80%, and a random step with probability 20%
-        # With prob 1% reset the game
-        if p <= 0.1:
-            game_service.reset_game_session()
-            print "----------------------------------------RESET GAME------------------------------------"
-            print "Game state:"
-            print game_service._GameService__game_state._GameState__lights_on
-            print "Game shortest solution:"
-            print game_service._GameService__game_state._GameState__shortest_solution
-        elif p < 0.2:
-            rand_step = (random.randint(0, 4), random.randint(0, 4))
-            game_service.switch_light(rand_step[0], rand_step[1])
-            print "-------Random Step: ", rand_step
-            print "Game state:"
-            print game_service._GameService__game_state._GameState__lights_on
-            print "Game shortest solution:"
-            print game_service._GameService__game_state._GameState__shortest_solution
-        else:
-            hint = game_service.get_hint()
-            game_service.switch_light(hint[0], hint[1])
-            print "------------Step: ", hint
-            print "Game state:"
-            print game_service._GameService__game_state._GameState__lights_on
-            print "Game shortest solution:"
-            print game_service._GameService__game_state._GameState__shortest_solution
-    print "No steps: " + str(game_service.get_no_steps_in_game_session())
-    print "Min no steps: " + str(game_service.length_of_shortest_solution_from_initial_state())
-    game_service.init_new_game_session()
+# #TODO: remove this code before submitting assignment
+# # This code demonstrates the behavior of the service layer
+# game_service = GameService()
+# for i in range(3):
+#     print "----------------------------------------INIT STATE------------------------------------------------"
+#     print game_service._GameService__game_state._GameState__lights_on
+#     print "Game shortest solution:"
+#     print game_service._GameService__game_state._GameState__shortest_solution
+#     while not game_service.won_game_session():
+#         p = random.uniform(0, 1)
+#         # Take the correct step with a probability of 80%, and a random step with probability 20%
+#         # With prob 1% reset the game
+#         if p <= 0.1:
+#             game_service.reset_game_session()
+#             print "----------------------------------------RESET GAME------------------------------------"
+#             print "Game state:"
+#             print game_service._GameService__game_state._GameState__lights_on
+#             print "Game shortest solution:"
+#             print game_service._GameService__game_state._GameState__shortest_solution
+#         elif p < 0.2:
+#             rand_step = (random.randint(0, 4), random.randint(0, 4))
+#             game_service.switch_light(rand_step[0], rand_step[1])
+#             print "-------Random Step: ", rand_step
+#             print "Game state:"
+#             print game_service._GameService__game_state._GameState__lights_on
+#             print "Game shortest solution:"
+#             print game_service._GameService__game_state._GameState__shortest_solution
+#         else:
+#             hint = game_service.get_hint()
+#             game_service.switch_light(hint[0], hint[1])
+#             print "------------Step: ", hint
+#             print "Game state:"
+#             print game_service._GameService__game_state._GameState__lights_on
+#             print "Game shortest solution:"
+#             print game_service._GameService__game_state._GameState__shortest_solution
+#     print "No steps: " + str(game_service.get_no_steps_in_game_session())
+#     print "Min no steps: " + str(game_service.length_of_shortest_solution_from_initial_state())
+#     game_service.init_new_game_session()

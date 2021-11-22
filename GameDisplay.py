@@ -3,7 +3,6 @@ from Tkinter import *
 from PIL import Image, ImageTk
 from Tkinter import E, S, N, W
 from os import *
-from animation import *
 
 from GameService import GameService
 
@@ -13,6 +12,8 @@ BOARD_WIDTH = WINDOW_WIDTH * 55 / 100
 BOARD_HEIGHT = WINDOW_HEIGHT * 60 / 100
 WINDOW_MARGIN_X = WINDOW_WIDTH * 20 / 100
 WINDOW_MARGIN_Y = 10
+POPUP_WIDTH = 600
+POPUP_HEIGHT = 300
 
 """
 This class is responsible for displaying the interface of the game 
@@ -79,8 +80,8 @@ class TileGame:
 
         self.image_congratulations = ImageTk.PhotoImage(
             Image.open("images/congratulations.png").resize((
-                300,
-                100)))
+                POPUP_WIDTH,
+                POPUP_HEIGHT / 2)))
 
         self.no_frames = self.__count_images_in_gif_dir(
             "images/animatedButton")
@@ -136,20 +137,24 @@ class TileGame:
     def __animate_hint(self, x, y, index):
         self.tiles[x][y].config(image=self.frames[index])
         index = (index + 1) % self.no_frames
-        self.hint_animation_id = self.window.after(100,
-                                                   lambda:
-                                                   self.__animate_hint(
-                                                       x, y, index))
+        self.hint_animation_id = \
+            self.window.after(100, lambda: self.__animate_hint(
+                x, y, index))
 
     def __display_results_popup(self):
         popup_dialog = Toplevel(self.window)
-        popup_dialog.geometry("400x400")
+        popup_dialog.geometry(
+            str(POPUP_WIDTH) + "x" + str(POPUP_HEIGHT))
         popup_dialog.title("Game results")
         popup_dialog.resizable(False, False)
-        Label(popup_dialog, image=self.image_congratulations)\
-            .place(x=40, y=40)
-        Label(popup_dialog, text="Your score is " + "_",
-              font=('Mistral 17 bold')).place(x=70, y=200)
+        popup_dialog.columnconfigure(0, weight=1)
+        popup_dialog.rowconfigure(0, weight=2)
+        popup_dialog.rowconfigure(1, weight=1)
+        Label(popup_dialog, image=self.image_congratulations).grid(
+            row=0, column=0)
+        Label(popup_dialog, text="Your score is " + str(
+            self.game_service.get_no_steps_in_game_session()),
+              font=('Mistral 17 bold')).grid(row=1, column=0)
 
     def __on_flip(self, x, y):
         if self.hint_animation_id is not None:
@@ -157,7 +162,10 @@ class TileGame:
         self.game_service.switch_light(x, y)
         self.__refresh_board()
         if self.game_service.won_game_session():
-            self.__display_results_popup()
+            # delay showing the results to display the board after
+            # the last step
+            self.window.after(500,
+                              lambda: self.__display_results_popup())
 
     def __on_hint(self):
         if not self.game_service.won_game_session():
@@ -178,8 +186,8 @@ class TileGame:
             return
         (x, y) = self.game_service.get_hint()
         self.__animate_hint(x, y, 0)
-        self.solution_animation_id = self.window.after(1500,
-                                                       lambda: self.__next_hint(x,y))
+        self.solution_animation_id = \
+            self.window.after(1500, lambda: self.__next_hint(x, y))
 
     def __on_solve(self):
         self.__animate_solution()

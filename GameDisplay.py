@@ -3,7 +3,7 @@ from Tkinter import *
 from PIL import Image, ImageTk
 from Tkinter import E, S, N, W
 from os import *
-import time
+from animation import *
 
 from GameService import GameService
 
@@ -77,6 +77,11 @@ class TileGame:
                 BOARD_HEIGHT / self.no_tiles)))
         self.tile_state = {0: image_led_off, 1: image_led_on}
 
+        self.image_congratulations = ImageTk.PhotoImage(
+            Image.open("images/congratulations.png").resize((
+                300,
+                100)))
+
         self.no_frames = self.__count_images_in_gif_dir(
             "images/animatedButton")
         self.frames = [ImageTk.PhotoImage(Image.open(
@@ -136,11 +141,23 @@ class TileGame:
                                                    self.__animate_hint(
                                                        x, y, index))
 
+    def __display_results_popup(self):
+        popup_dialog = Toplevel(self.window)
+        popup_dialog.geometry("400x400")
+        popup_dialog.title("Game results")
+        popup_dialog.resizable(False, False)
+        Label(popup_dialog, image=self.image_congratulations)\
+            .place(x=40, y=40)
+        Label(popup_dialog, text="Your score is " + "_",
+              font=('Mistral 17 bold')).place(x=70, y=200)
+
     def __on_flip(self, x, y):
         if self.hint_animation_id is not None:
             self.window.after_cancel(self.hint_animation_id)
         self.game_service.switch_light(x, y)
         self.__refresh_board()
+        if self.game_service.won_game_session():
+            self.__display_results_popup()
 
     def __on_hint(self):
         if not self.game_service.won_game_session():

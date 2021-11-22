@@ -1,0 +1,48 @@
+%set(binary_resolution).
+%set(print_gen).
+
+set(prolog_style_variables).
+set(arithmetic).
+assign(max_megs, 1000).
+assign(domain_size, 26).
+
+formulas(assumptions).
+
+Xor(X, Y)=1 <-> (X=0 & Y=1) | (X=1 & Y=0).
+Xor(X, Y)!=1 -> Xor(X, Y)=0.
+
+And(X, Y)=1 <-> (X=1 & Y=1).
+And(X, Y)!=1 -> And(X, Y)=0.
+
+On(X)=1 | On(X)=0.
+
+(X>0 & Y+1=X & Z=DotProduct1(Y) & O=On(X) & N=N1(X)) -> DotProduct1(X) = Xor(Z, And(O, N)).
+DotProduct1(0)=0.
+
+(X>0 & Y+1=X & Z=DotProduct2(Y) & O=On(X) & N=N2(X)) -> DotProduct2(X) = Xor(Z, And(O, N)).
+DotProduct2(0)=0.
+
+DotProduct1(25)=0.
+DotProduct2(25)=0.
+
+On(0)=0.
+exists X On(X)=1.
+
+N1(0)=0. 
+N1(X) = 0 | N1(X)=1.
+N2(X) = 0 | N2(X)=1.
+N1( 1)=0. N1( 2)=1. N1( 3)=1. N1( 4)=1. N1( 5)=0. 
+N1( 6)=1. N1( 7)=0. N1( 8)=1. N1( 9)=0. N1(10)=1.  
+N1(11)=1. N1(12)=1. N1(13)=0. N1(14)=1. N1(15)=1.
+N1(16)=1. N1(17)=0. N1(18)=1. N1(19)=0. N1(20)=1.  
+N1(21)=0. N1(22)=1. N1(23)=1. N1(24)=1. N1(25)=0. 
+
+N2(0)=0.
+N2( 1)=1. N2( 2)=0. N2( 3)=1. N2( 4)=0. N2( 5)=1. 
+N2( 6)=1. N2( 7)=0. N2( 8)=1. N2( 9)=0. N2(10)=1.  
+N2(11)=0. N2(12)=0. N2(13)=0. N2(14)=0. N2(15)=0.
+N2(16)=1. N2(17)=0. N2(18)=1. N2(19)=0. N2(20)=1.  
+N2(21)=1. N2(22)=0. N2(23)=1. N2(24)=0. N2(25)=1. 
+
+end_of_list.
+

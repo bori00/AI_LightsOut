@@ -1,0 +1,163 @@
+============================== Mace4 =================================
+Mace4 (64) version 2017-11A (CIIRC), November 2017.
+Process 95363 was started by os on ubuntu,
+Sun Nov 21 13:41:08 2021
+The command was "mace4 1 -f AllProver9Mace4Code/allout_generator_A.in".
+============================== end of head ===========================
+
+============================== INPUT =================================
+
+% Reading from file AllProver9Mace4Code/allout_generator_A.in
+
+set(prolog_style_variables).
+set(arithmetic).
+    % set(arithmetic) -> clear(lnh).
+    % set(arithmetic) -> assign(selection_order, 0).
+
+    % Declaring Mace4 arithmetic parse types.
+assign(domain_size,7).
+    % assign(domain_size, 7) -> assign(start_size, 7).
+    % assign(domain_size, 7) -> assign(end_size, 7).
+
+formulas(usable).
+(all X all Y (Switch(X,Y) = 0 | Switch(X,Y) = 1)).
+(all X all Y (On(X,Y) = 0 | On(X,Y) = 1)).
+(exists X exists Y On(X,Y) = 1).
+(all X (Switch(X,0) = 0 & Switch(X,6) = 0)).
+(all Y (Switch(0,Y) = 0 & Switch(6,Y) = 0)).
+(all X (On(X,0) = 0 & On(X,6) = 0)).
+(all Y (On(0,Y) = 0 & On(6,Y) = 0)).
+Xor(X,Y) = 1 <-> X = 1 & Y = 0 | X = 0 & Y = 1.
+Xor(X,Y) != 1 <-> Xor(X,Y) = 0.
+X >= 1 & X <= 5 & Y >= 1 & Y <= 5 & Z = X + 1 & X = U + 1 & V = Y + 1 & Y = W + 1 -> (OddToggles(X,Y) <-> Xor(Xor(Xor(Switch(X,V),Switch(X,W)),Xor(Switch(U,Y),Switch(Z,Y))),Switch(X,Y)) = 1).
+On(X,Y) = 1 <-> OddToggles(X,Y).
+On(X,Y) = 0 <-> -OddToggles(X,Y).
+end_of_list.
+
+formulas(assumptions).
+end_of_list.
+
+formulas(goals).
+end_of_list.
+
+============================== end of input ==========================
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 (all X all Y (Switch(X,Y) = 0 | Switch(X,Y) = 1)) # label(non_clause).  [assumption].
+2 (all X all Y (On(X,Y) = 0 | On(X,Y) = 1)) # label(non_clause).  [assumption].
+3 (exists X exists Y On(X,Y) = 1) # label(non_clause).  [assumption].
+4 (all X (Switch(X,0) = 0 & Switch(X,6) = 0)) # label(non_clause).  [assumption].
+5 (all Y (Switch(0,Y) = 0 & Switch(6,Y) = 0)) # label(non_clause).  [assumption].
+6 (all X (On(X,0) = 0 & On(X,6) = 0)) # label(non_clause).  [assumption].
+7 (all Y (On(0,Y) = 0 & On(6,Y) = 0)) # label(non_clause).  [assumption].
+8 Xor(X,Y) = 1 <-> X = 1 & Y = 0 | X = 0 & Y = 1 # label(non_clause).  [assumption].
+9 Xor(X,Y) != 1 <-> Xor(X,Y) = 0 # label(non_clause).  [assumption].
+10 X >= 1 & X <= 5 & Y >= 1 & Y <= 5 & Z = X + 1 & X = U + 1 & V = Y + 1 & Y = W + 1 -> (OddToggles(X,Y) <-> Xor(Xor(Xor(Switch(X,V),Switch(X,W)),Xor(Switch(U,Y),Switch(Z,Y))),Switch(X,Y)) = 1) # label(non_clause).  [assumption].
+11 On(X,Y) = 1 <-> OddToggles(X,Y) # label(non_clause).  [assumption].
+12 On(X,Y) = 0 <-> -OddToggles(X,Y) # label(non_clause).  [assumption].
+
+============================== end of process non-clausal formulas ===
+
+============================== CLAUSES FOR SEARCH ====================
+
+formulas(mace4_clauses).
+Switch(A,B) = 0 | Switch(A,B) = 1.
+On(A,B) = 0 | On(A,B) = 1.
+On(c1,c2) = 1.
+Switch(A,0) = 0.
+Switch(A,6) = 0.
+Switch(0,A) = 0.
+Switch(6,A) = 0.
+On(A,0) = 0.
+On(A,6) = 0.
+On(0,A) = 0.
+On(6,A) = 0.
+Xor(A,B) != 1 | 1 = A | 0 = A.
+Xor(A,B) != 1 | 1 = A | 1 = B.
+Xor(A,B) != 1 | 0 = B | 0 = A.
+Xor(A,B) != 1 | 0 = B | 1 = B.
+Xor(A,B) = 1 | 1 != A | 0 != B.
+Xor(A,B) = 1 | 0 != A | 1 != B.
+Xor(A,B) = 1 | Xor(A,B) = 0.
+Xor(A,B) != 1 | Xor(A,B) != 0.
+-(A >= 1) | -(A <= 5) | -(B >= 1) | -(B <= 5) | A + 1 != C | D + 1 != A | B + 1 != E | F + 1 != B | -OddToggles(A,B) | Xor(Xor(Xor(Switch(A,E),Switch(A,F)),Xor(Switch(D,B),Switch(C,B))),Switch(A,B)) = 1.
+-(A >= 1) | -(A <= 5) | -(B >= 1) | -(B <= 5) | A + 1 != C | D + 1 != A | B + 1 != E | F + 1 != B | OddToggles(A,B) | Xor(Xor(Xor(Switch(A,E),Switch(A,F)),Xor(Switch(D,B),Switch(C,B))),Switch(A,B)) != 1.
+On(A,B) != 1 | OddToggles(A,B).
+On(A,B) = 1 | -OddToggles(A,B).
+On(A,B) != 0 | -OddToggles(A,B).
+On(A,B) = 0 | OddToggles(A,B).
+end_of_list.
+
+============================== end of clauses for search =============
+
+% The largest natural number in the input is 6.
+
+============================== DOMAIN SIZE 7 =========================
+
+============================== MODEL =================================
+
+interpretation( 7, [number=1, seconds=0], [
+
+        function(c1, [ 1 ]),
+
+        function(c2, [ 1 ]),
+
+        function(On(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Switch(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 0, 0,
+			   0, 1, 1, 0, 0, 0, 0,
+			   0, 1, 0, 1, 0, 0, 0,
+			   0, 0, 1, 1, 1, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        function(Xor(_,_), [
+			   0, 1, 0, 0, 0, 0, 0,
+			   1, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0 ]),
+
+        relation(OddToggles(_,_), [
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 1, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 0, 0,
+			   0, 0, 0, 0, 0, 1, 0,
+			   0, 0, 0, 0, 0, 0, 0 ])
+]).
+
+============================== end of model ==========================
+
+============================== STATISTICS ============================
+
+For domain size 7.
+
+Current CPU time: 0.00 seconds (total CPU time: 0.94 seconds).
+Ground clauses: seen=236041, kept=559.
+Selections=700, assignments=4329, propagations=103, current_models=1.
+Rewrite_terms=58622, rewrite_bools=7485, indexes=1.
+Rules_from_neg_clauses=2, cross_offs=65.
+
+============================== end of statistics =====================
+
+User_CPU=0.94, System_CPU=0.02, Wall_clock=1.
+
+Exiting with 1 model.
+
+Process 95363 exit (max_models) Sun Nov 21 13:41:09 2021
+The process finished Sun Nov 21 13:41:09 2021

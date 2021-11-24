@@ -13,7 +13,7 @@ BOARD_HEIGHT = WINDOW_HEIGHT * 60 / 100
 WINDOW_MARGIN_X = WINDOW_WIDTH * 20 / 100
 WINDOW_MARGIN_Y = 10
 POPUP_WIDTH = 600
-POPUP_HEIGHT = 300
+POPUP_HEIGHT = 350
 
 """
 This class is responsible for displaying the interface of the game 
@@ -148,13 +148,17 @@ class TileGame:
         popup_dialog.title("Game results")
         popup_dialog.resizable(False, False)
         popup_dialog.columnconfigure(0, weight=1)
-        popup_dialog.rowconfigure(0, weight=2)
+        popup_dialog.rowconfigure(0, weight=3)
         popup_dialog.rowconfigure(1, weight=1)
+        popup_dialog.rowconfigure(2, weight=2)
         Label(popup_dialog, image=self.image_congratulations).grid(
             row=0, column=0)
-        Label(popup_dialog, text="Your score is " + str(
-            self.game_service.get_no_steps_in_game_session()),
+        Label(popup_dialog, text="You solved the game in " + str(
+            self.game_service.get_no_steps_in_game_session()) + " steps.",
               font=('Mistral 17 bold')).grid(row=1, column=0)
+        Label(popup_dialog, text="The shortest solution consisted of " + str(
+            self.game_service.length_of_shortest_solution_from_initial_state()) + " steps.",
+              font=('Mistral 15 bold')).grid(row=2, column=0)
 
     def __on_flip(self, x, y):
         if self.hint_animation_id is not None:

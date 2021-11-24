@@ -30,6 +30,7 @@ class GameService:
         self.__played_games = []
         self.__game_state = None
         self.init_new_game_session()
+        self.__set_game_session_solutions()
 
     """Starts a new game session, with a puzzle that was not used before in this game, unless all puzzles have 
     already been used. """
@@ -42,7 +43,6 @@ class GameService:
             game_model_index = random.randint(0, GameService.NO_GAME_MODELS - 1)
         self.__played_games.append(game_model_index)
         self.__game_state = GameState(deepcopy(self.__game_models[game_model_index]))
-        self.__set_game_session_solutions()
 
     """
     Returns true if and only if the current game session was won.
@@ -57,8 +57,6 @@ class GameService:
 
     def switch_light(self, x, y):
         self.__game_state.switch_light(x, y)
-        if not self.__game_state.has_shortest_solution():
-            self.__set_game_session_solutions()
 
     """
     Returns the state of all light bulbs in the current game session, in the format of a list of lists of integers, 

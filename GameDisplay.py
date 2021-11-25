@@ -134,6 +134,16 @@ class GameDisplay:
                                       command=self.__on_new_game)
         self.new_game_button.grid(row=0, column=3)
 
+    def __stop_running_hint_animations(self):
+        if self.hint_animation_id is not None:
+            self.window.after_cancel(self.hint_animation_id)
+            self.hint_animation_id = None
+
+    def __stop_running_solution_animations(self):
+        if self.solution_animation_id is not None:
+            self.window.after_cancel(self.solution_animation_id)
+            self.solution_animation_id = None
+
     def __display_results_popup(self, game_solved_by_player):
         popup_dialog = Toplevel(self.window)
         popup_dialog.geometry(
@@ -161,44 +171,41 @@ class GameDisplay:
               font=('Mistral 15 bold')).grid(
             row=2 if game_solved_by_player else 0, column=0)
 
-    def __stop_running_hint_animations(self, enable_hint_button=True):
-        if self.hint_animation_id is not None:
-            self.window.after_cancel(self.hint_animation_id)
-            self.hint_animation_id = None
-            # enable_hint_button determines if it is needed to re-enable
-            # the button for hint after the animation is stopped
-            self.hint_button.config(
-                state=NORMAL if enable_hint_button else DISABLED)
+    def __set_button_editability(self, enable_hint_button=True,
+                                 enable_solve_button=True):
+        self.hint_button.config(
+            state=NORMAL if enable_hint_button else DISABLED)
+        self.solve_button.config(
+            state=NORMAL if enable_solve_button else DISABLED)
 
-    def __stop_running_solution_animations(self):
-        if self.solution_animation_id is not None:
-            self.window.after_cancel(self.solution_animation_id)
-            self.solution_animation_id = None
-            # disable the button Solve after the animation is stopped
-            self.solve_button.config(state=DISABLED)
-            # disable the button Hint after the animation is stopped
-            self.hint_button.config(state=DISABLED)
+    def __handle_finish_game(self, game_solved_by_player):
+        self.__display_results_popup(
+            game_solved_by_player=game_solved_by_player)
+        self.__set_button_editability(enable_hint_button=False,
+                                      enable_solve_button=False)
 
-    def __flip_tile(self, x, y, re_enable_hint_button=True,
+    def __flip_tile(self, x, y, enable_hint_button,
+                    enable_solve_button,
                     game_solved_by_player=True):
         # stop any running hint animations
-        self.__stop_running_hint_animations(
-            enable_hint_button=re_enable_hint_button)
+        self.__stop_running_hint_animations()
+        self.__set_button_editability(enable_hint_button,
+                                      enable_solve_button)
         self.game_service.switch_light(x, y)
         self.__refresh_board()
         if self.game_service.won_game_session():
             # delay showing the results to display the board after
             # the last step
-            self.window.after(500,
-                              lambda: self.__display_results_popup(
-                                  game_solved_by_player=game_solved_by_player))
+            self.window.after(500, lambda: self.__handle_finish_game(
+                game_solved_by_player))
 
     def __on_flip(self, x, y):
         # tiles cannot be flipped while the solution simulation is
         # running
         if self.solution_animation_id is not None:
             return
-        self.__flip_tile(x, y)
+        self.__flip_tile(x, y, enable_hint_button=True,
+                         enable_solve_button=True)
 
     def __animate_hint(self, x, y, index=0):
         self.tiles[x][y].config(image=self.frames[index])
@@ -212,7 +219,7 @@ class GameDisplay:
         if not self.game_service.won_game_session():
             # disable the button until the hint animation is stopped:
             # only 1 hint should be played at a time
-            self.hint_button.config(state=DISABLED)
+            self.__set_button_editability(enable_hint_button=False)
             (x, y) = self.game_service.get_hint()
             self.__animate_hint(x, y)
 
@@ -221,13 +228,13 @@ class GameDisplay:
         self.__stop_running_hint_animations()
         self.__stop_running_solution_animations()
         # re-enable the buttons
-        self.solve_button.config(stat=NORMAL)
-        self.hint_button.config(state=NORMAL)
+        self.__set_button_editability()
         self.game_service.reset_game_session()
         self.__refresh_board()
 
     def __next_hint(self, x, y):
-        self.__flip_tile(x, y, re_enable_hint_button=False,
+        self.__flip_tile(x, y, enable_hint_button=False,
+                         enable_solve_button=False,
                          game_solved_by_player=False)
         self.__animate_solution()
 
@@ -242,20 +249,20 @@ class GameDisplay:
             self.window.after(1500, lambda: self.__next_hint(x, y))
 
     def __on_solve(self):
-        # stop previous hint animations and disable hint button
-        self.__stop_running_hint_animations(enable_hint_button=False)
-        self.hint_button.config(state=DISABLED)
+        # stop previous hint animations and disable Hint button
+        self.__stop_running_hint_animations()
+        # clear the animation from the board
         self.__refresh_board()
-        # disable the solve button until the animation is running
-        self.solve_button.config(state=DISABLED)
+        # disable the Hint and Solve buttons while the current animation is running
+        self.__set_button_editability(enable_hint_button=False,
+                                      enable_solve_button=False)
         self.__animate_solution()
 
     def __on_new_game(self):
         # stop all running animations
         self.__stop_running_hint_animations()
         # re-enable the buttons
-        self.solve_button.config(stat=NORMAL)
-        self.hint_button.config(state=NORMAL)
+        self.__set_button_editability()
         self.__stop_running_solution_animations()
         self.game_service.init_new_game_session()
         self.__refresh_board()

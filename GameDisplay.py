@@ -174,9 +174,10 @@ class TileGame:
         if self.solution_animation_id is not None:
             self.window.after_cancel(self.solution_animation_id)
             self.solution_animation_id = None
-            self.solve_button.config(state=NORMAL)
-            # re-enable the button Hint after the animation is stopped
-            self.hint_button.config(state=NORMAL)
+            # disable the button Solve after the animation is stopped
+            self.solve_button.config(state=DISABLED)
+            # disable the button Hint after the animation is stopped
+            self.hint_button.config(state=DISABLED)
 
     def __flip_tile(self, x, y, re_enable_hint_button=True,
                     game_solved_by_player=True):
@@ -219,6 +220,9 @@ class TileGame:
         # stop all running animations
         self.__stop_running_hint_animations()
         self.__stop_running_solution_animations()
+        # re-enable the buttons
+        self.solve_button.config(stat=NORMAL)
+        self.hint_button.config(state=NORMAL)
         self.game_service.reset_game_session()
         self.__refresh_board()
 
@@ -249,6 +253,9 @@ class TileGame:
     def __on_new_game(self):
         # stop all running animations
         self.__stop_running_hint_animations()
+        # re-enable the buttons
+        self.solve_button.config(stat=NORMAL)
+        self.hint_button.config(state=NORMAL)
         self.__stop_running_solution_animations()
         self.game_service.init_new_game_session()
         self.__refresh_board()

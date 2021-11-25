@@ -21,7 +21,7 @@ and handle user actions.
 """
 
 
-class TileGame:
+class GameDisplay:
 
     def __init__(self, no_tiles):
         self.no_tiles = no_tiles
@@ -265,5 +265,5 @@ class TileGame:
 
 
 if __name__ == '__main__':
-    game = TileGame(no_tiles=5)
+    game = GameDisplay(no_tiles=5)
     game.run()

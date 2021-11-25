@@ -119,29 +119,22 @@ class TileGame:
         self.button_panel.columnconfigure(2, weight=1)
         self.hint_button = Button(master=self.button_panel,
                                   text="Hint",
-                                  command=self.__on_hint) \
-            .grid(row=0, column=0)
+                                  command=self.__on_hint)
+        self.hint_button.grid(row=0, column=0)
         self.reset_button = Button(master=self.button_panel,
                                    text="Reset",
-                                   command=self.__on_reset) \
-            .grid(row=0, column=1)
+                                   command=self.__on_reset)
+        self.reset_button.grid(row=0, column=1)
         self.solve_button = Button(master=self.button_panel,
                                    text="Solve",
-                                   command=self.__on_solve) \
-            .grid(row=0, column=2)
-        self.solve_button = Button(master=self.button_panel,
-                                   text="New game",
-                                   command=self.__on_new_game) \
-            .grid(row=0, column=3)
+                                   command=self.__on_solve)
+        self.solve_button.grid(row=0, column=2)
+        self.new_game_button = Button(master=self.button_panel,
+                                      text="New game",
+                                      command=self.__on_new_game)
+        self.new_game_button.grid(row=0, column=3)
 
-    def __animate_hint(self, x, y, index):
-        self.tiles[x][y].config(image=self.frames[index])
-        index = (index + 1) % self.no_frames
-        self.hint_animation_id = \
-            self.window.after(100, lambda: self.__animate_hint(
-                x, y, index))
-
-    def __display_results_popup(self):
+    def __display_results_popup(self, game_solved_by_player):
         popup_dialog = Toplevel(self.window)
         popup_dialog.geometry(
             str(POPUP_WIDTH) + "x" + str(POPUP_HEIGHT))
@@ -151,52 +144,112 @@ class TileGame:
         popup_dialog.rowconfigure(0, weight=3)
         popup_dialog.rowconfigure(1, weight=1)
         popup_dialog.rowconfigure(2, weight=2)
-        Label(popup_dialog, image=self.image_congratulations).grid(
-            row=0, column=0)
-        Label(popup_dialog, text="You solved the game in " + str(
-            self.game_service.get_no_steps_in_game_session()) + " steps.",
-              font=('Mistral 17 bold')).grid(row=1, column=0)
-        Label(popup_dialog, text="The shortest solution consisted of " + str(
-            self.game_service.length_of_shortest_solution_from_initial_state()) + " steps.",
-              font=('Mistral 15 bold')).grid(row=2, column=0)
 
-    def __on_flip(self, x, y):
+        # display the congratulatory message only if the puzzle was
+        # solved by the player (and not by clicking on the Solve button)
+        if game_solved_by_player:
+            Label(popup_dialog,
+                  image=self.image_congratulations).grid(
+                row=0, column=0)
+            Label(popup_dialog, text="You solved the game in " + str(
+                self.game_service.get_no_steps_in_game_session()) + " steps.",
+                  font=('Mistral 17 bold')).grid(row=1, column=0)
+
+        Label(popup_dialog,
+              text="The shortest solution consisted of " + str(
+                  self.game_service.length_of_shortest_solution_from_initial_state()) + " steps.",
+              font=('Mistral 15 bold')).grid(
+            row=2 if game_solved_by_player else 0, column=0)
+
+    def __stop_running_hint_animations(self, enable_hint_button=True):
         if self.hint_animation_id is not None:
             self.window.after_cancel(self.hint_animation_id)
+            self.hint_animation_id = None
+            # enable_hint_button determines if it is needed to re-enable
+            # the button for hint after the animation is stopped
+            self.hint_button.config(
+                state=NORMAL if enable_hint_button else DISABLED)
+
+    def __stop_running_solution_animations(self):
+        if self.solution_animation_id is not None:
+            self.window.after_cancel(self.solution_animation_id)
+            self.solution_animation_id = None
+            self.solve_button.config(state=NORMAL)
+            # re-enable the button Hint after the animation is stopped
+            self.hint_button.config(state=NORMAL)
+
+    def __flip_tile(self, x, y, re_enable_hint_button=True,
+                    game_solved_by_player=True):
+        # stop any running hint animations
+        self.__stop_running_hint_animations(
+            enable_hint_button=re_enable_hint_button)
         self.game_service.switch_light(x, y)
         self.__refresh_board()
         if self.game_service.won_game_session():
             # delay showing the results to display the board after
             # the last step
             self.window.after(500,
-                              lambda: self.__display_results_popup())
+                              lambda: self.__display_results_popup(
+                                  game_solved_by_player=game_solved_by_player))
+
+    def __on_flip(self, x, y):
+        # tiles cannot be flipped while the solution simulation is
+        # running
+        if self.solution_animation_id is not None:
+            return
+        self.__flip_tile(x, y)
+
+    def __animate_hint(self, x, y, index=0):
+        self.tiles[x][y].config(image=self.frames[index])
+        index = (index + 1) % self.no_frames
+        self.hint_animation_id = \
+            self.window.after(100, lambda: self.__animate_hint(
+                x, y, index))
 
     def __on_hint(self):
+        # show hint only if the game has not yet been won
         if not self.game_service.won_game_session():
+            # disable the button until the hint animation is stopped:
+            # only 1 hint should be played at a time
+            self.hint_button.config(state=DISABLED)
             (x, y) = self.game_service.get_hint()
-            self.__animate_hint(x, y, index=0)
+            self.__animate_hint(x, y)
 
     def __on_reset(self):
+        # stop all running animations
+        self.__stop_running_hint_animations()
+        self.__stop_running_solution_animations()
         self.game_service.reset_game_session()
         self.__refresh_board()
 
     def __next_hint(self, x, y):
-        self.__on_flip(x, y)
+        self.__flip_tile(x, y, re_enable_hint_button=False,
+                         game_solved_by_player=False)
         self.__animate_solution()
 
     def __animate_solution(self):
+        # run simulation only if the game has not yet been won
         if self.game_service.won_game_session():
-            self.window.after_cancel(self.solution_animation_id)
+            self.__stop_running_solution_animations()
             return
         (x, y) = self.game_service.get_hint()
-        self.__animate_hint(x, y, 0)
+        self.__animate_hint(x, y)
         self.solution_animation_id = \
             self.window.after(1500, lambda: self.__next_hint(x, y))
 
     def __on_solve(self):
+        # stop previous hint animations and disable hint button
+        self.__stop_running_hint_animations(enable_hint_button=False)
+        self.hint_button.config(state=DISABLED)
+        self.__refresh_board()
+        # disable the solve button until the animation is running
+        self.solve_button.config(state=DISABLED)
         self.__animate_solution()
 
     def __on_new_game(self):
+        # stop all running animations
+        self.__stop_running_hint_animations()
+        self.__stop_running_solution_animations()
         self.game_service.init_new_game_session()
         self.__refresh_board()
 
